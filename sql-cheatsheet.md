@@ -164,6 +164,15 @@ ORDER BY avg_revenue DESC;
 
 👉 typický business use-case (segmentace zákazníků)
 
+👉 v SELECT:
+
+používej aliasy ✅
+
+👉 v HAVING:
+
+radši používej funkci (COUNT(*)) ✅
+👉 některé DB alias v HAVING „nevidí“
+
 📊 17. CSV / Excel → SQL
 
 👉 Excel → uložit jako .csv
