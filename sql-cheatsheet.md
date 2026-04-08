@@ -180,3 +180,63 @@ seskup (GROUP BY)
 spočítej (SUM, COUNT…)
 filtruj skupiny (HAVING)
 seřaď (ORDER BY)
+
+## 🔥 Pokročilejší HAVING (kombinace podmínek)
+
+👉 Můžeme filtrovat skupiny podle více podmínek:
+
+```sql
+SELECT
+    c.name,
+    COUNT(*) AS total_orders,
+    AVG(o.amount) AS avg_revenue
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.name
+HAVING COUNT(*) > 1 AND AVG(o.amount) > 400;
+
+👉 Co to dělá:
+
+najde zákazníky
+kteří mají více než 1 objednávku
+a zároveň mají průměrnou objednávku vyšší než 400
+🧠 WHERE vs HAVING (hlubší pochopení)
+
+👉 WHERE:
+
+filtruje jednotlivé řádky
+používá se před GROUP BY
+
+👉 HAVING:
+
+filtruje skupiny
+používá se po GROUP BY
+pracuje s agregacemi (SUM, AVG, COUNT)
+⚡ Příklad kombinace WHERE + HAVING
+SELECT
+    c.name,
+    COUNT(*) AS total_orders
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+WHERE o.amount > 100
+GROUP BY c.name
+HAVING COUNT(*) > 1;
+
+👉 Logika:
+
+WHERE → vyfiltruje objednávky (řádky)
+GROUP BY → rozdělí podle zákazníků
+HAVING → vybere jen některé zákazníky
+🧠 Analytické myšlení v SQL
+
+👉 Nepíšu kód, ale popisuju výsledek:
+
+Jaká data beru (FROM)
+Jak je spojím (JOIN)
+Co odfiltruju (WHERE)
+Jak je rozdělím (GROUP BY)
+Co spočítám (SUM, COUNT, AVG)
+Co z toho vyberu (HAVING)
+Jak to seřadím (ORDER BY)
+
+👉 SQL = způsob, jak se ptát na data
