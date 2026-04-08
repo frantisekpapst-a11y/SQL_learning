@@ -19,6 +19,7 @@ GROUP BY
 HAVING
 SELECT
 ORDER BY
+
 ✍️ 3. Syntaxe (čárky, středníky, mezery)
 Čárka ,
 odděluje sloupce
@@ -36,16 +37,19 @@ SQL je ignoruje → slouží pro čitelnost
 
 SELECT *
 FROM orders;
+
 🧱 4. Vytvoření tabulky
 CREATE TABLE orders (
     order_id INTEGER,
     customer_id INTEGER,
     amount INTEGER
 );
+
 ➕ 5. Vložení dat
 INSERT INTO orders VALUES (1, 1, 500);
 INSERT INTO orders VALUES (2, 2, 300);
 INSERT INTO orders VALUES (3, 1, 700);
+
 📊 6. SELECT – výpis dat
 SELECT *
 FROM orders;
@@ -64,6 +68,7 @@ COUNT(*)        -- počet řádků
 COUNT(sloupec)  -- ignoruje NULL
 SUM(amount)     -- součet
 AVG(amount)     -- průměr
+
 📊 9. GROUP BY – agregace
 SELECT customer_id, SUM(amount)
 FROM orders
@@ -84,15 +89,19 @@ WHERE	HAVING
 filtr řádků	filtr skupin
 před GROUP BY	po GROUP BY
 nefunguje s AVG	funguje
+
 🎯 11. DISTINCT – unikátní hodnoty
 SELECT DISTINCT customer_id
 FROM orders;
+
 🔢 12. COUNT vs COUNT(DISTINCT)
 COUNT(*)                      -- všechny řádky
 COUNT(customer_id)            -- bez NULL
 COUNT(DISTINCT customer_id)  -- unikátní hodnoty
+
 📈 13. ORDER BY – řazení
 ORDER BY amount DESC;
+
 🔗 14. JOIN – spojení tabulek
 SELECT *
 FROM orders
@@ -135,6 +144,7 @@ SELECT
 FROM orders o
 JOIN customers c ON o.customer_id = c.customer_id
 GROUP BY c.name;
+
 🔥 16. HAVING – pokročilé použití
 zákazníci s více než 1 objednávkou
 HAVING COUNT(*) > 1;
