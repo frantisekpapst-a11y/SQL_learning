@@ -75,3 +75,21 @@ FROM orders o
 JOIN customers c on o.customer_id = c.customer_id
 GROUP BY c.name
 HAVING COUNT(*) > 1 AND AVG(o.amount) > 400;
+
+SELECT
+   c.name,
+   COUNT(*) AS total_orders,
+   SUM(o.amount) AS total_revenue
+FROM orders o
+JOIN customers c on o.customer_id = c.customer_id
+GROUP BY c.name
+HAVING total_orders > 1 AND total_revenue > 800
+ORDER BY total_revenue DESC;
+
+SELECT
+   c.name,
+   COUNT(*) AS total_orders
+FROM orders o
+JOIN customers c on o.customer_id = c.customer_id
+GROUP BY c.name
+HAVING total_orders >= 2;
