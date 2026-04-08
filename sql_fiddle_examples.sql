@@ -62,9 +62,16 @@ HAVING COUNT(*) > 1 AND AVG(amount) > 400;
 
 SELECT
    c.name,
-   COUNT(*) AS total_orders,
-   AVG(amount) AS avg_revenue
+   SUM(o.amount) AS total_revenue_over500
 FROM orders o
 JOIN customers c on o.customer_id = c.customer_id
 GROUP BY c.name
-HAVING COUNT(*) > 1 AND AVG(amount) > 400;
+HAVING SUM(o.amount) > 500;
+
+SELECT
+   c.name,
+   AVG(o.amount) AS avg_revenue
+FROM orders o
+JOIN customers c on o.customer_id = c.customer_id
+GROUP BY c.name
+HAVING COUNT(*) > 1 AND AVG(o.amount) > 400;
