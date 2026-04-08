@@ -1,212 +1,106 @@
 # SQL Basics – Data Analyst Cheat Sheet
 
-🧠 1. Struktura SQL dotazu (tohle je základ všeho)
-
-👉 Každý dotaz má skoro vždy tuhle kostru:
-SELECT co_chci_vidět
+🧠 1. Struktura SQL dotazu
+SELECT co_chci_videt
 FROM odkud_beru_data
-WHERE podmínka
-GROUP BY seskupení
-HAVING podmínka_na_skupiny
-ORDER BY řazení;
+WHERE podminka
+GROUP BY seskupeni
+HAVING podminka_na_skupiny
+ORDER BY razeni;
+Jak to číst:
 
-💡 Jak to číst lidsky:
-👉 „Vyber (SELECT)
-z tabulky (FROM)
-vyfiltruj (WHERE)
-seskup (GROUP BY)
-ještě filtruj skupiny (HAVING)
-a seřaď (ORDER BY)“
+👉 „Vyber data → odkud → vyfiltruj → seskup → filtruj skupiny → seřaď“
 
-✍️ 2. Čárky, mezery, středníky
-
-✅ ČÁRKA ,
-
-Používá se:
-mezi sloupci v SELECT
-mezi hodnotami
-SELECT name, amount
-
-❌ chyba:
-SELECT name amount   -- chybí čárka
-
-✅ STŘEDNÍK ;
-
-👉 ukončuje celý dotaz
-
-SELECT * FROM orders;
-💡 v DB Fiddle:
-
-můžeš mít víc dotazů pod sebou
-každý musí končit ;
-
-⚠️ POZOR – častá chyba
-FROM orders
-JOIN customers
-ON ...
-;   ← tady to ukončíš ❌
-
-GROUP BY ...   ← už nepatří do dotazu
-✅ MEZERY
-
-👉 SQL ignoruje mezery → jsou jen pro čitelnost
-
-Tohle je stejné:
-
-SELECT * FROM orders;
-SELECT
-*
+⚡ 2. Logické pořadí SQL (velmi důležité)
 FROM
-orders;
+JOIN
+WHERE
+GROUP BY
+HAVING
+SELECT
+ORDER BY
+✍️ 3. Syntaxe (čárky, středníky, mezery)
+Čárka ,
+odděluje sloupce
+SELECT name, amount
+Středník ;
+ukončuje dotaz
+SELECT * FROM orders;
 
-👉 používej formátování → přehlednost = základ
+👉 při více dotazech musí mít každý ;
 
-🧱 3. Jak vytvořit tabulku (CREATE TABLE)
+Mezery
+SQL je ignoruje → slouží pro čitelnost
+
+✅ dobrá praxe:
+
+SELECT *
+FROM orders;
+🧱 4. Vytvoření tabulky
 CREATE TABLE orders (
-  order_id INTEGER,
-  customer_id INTEGER,
-  amount INTEGER
+    order_id INTEGER,
+    customer_id INTEGER,
+    amount INTEGER
 );
-Co to znamená:
-orders = název tabulky
-sloupce:
-order_id → číslo
-customer_id → číslo
-amount → číslo
-
-➕ 4. Jak tam dostat data
-INSERT INTO orders VALUES (1, 1, 500);
-
-👉 pořadí musí odpovídat sloupcům
-
-📊 5. Jak to souvisí s Excel / CSV
-👉 Varianta 1: CSV (nejčastější v praxi)
-
-Excel → uložíš jako .csv
-
-Pak:
-
-v nástroji (Power BI, Python, SQL tool)
-nebo import do DB
-
-👉 CSV = „most mezi světy“
-
-👉 Varianta 2: ručně (co děláš teď)
-CREATE TABLE ...
-INSERT INTO ...
-
-👉 dobré na učení
-
-👉 Varianta 3: reálná praxe
-
-V práci:
-
-data už existují v databázi
-ty píšeš jen:
-SELECT ...
-FROM obrovská_tabulka
-
-🧠 6. Jak nad tím přemýšlet (nejdůležitější)
-
-👉 SQL není programování, ale:
-
-➡️ popis toho, co chceš vidět
-
-Např.:
-
-„Chci vědět kolik utratil každý zákazník“
-
-↓
-
-SELECT customer, SUM(amount)
-FROM orders
-GROUP BY customer;
-
-🔥 Mini shrnutí
-čárky → oddělují sloupce
-středník → konec dotazu
-mezery → jen pro čitelnost
-struktura = SELECT → FROM → WHERE → GROUP BY → ORDER BY
-CREATE TABLE → vytvoření tabulky
-INSERT → data
-
-🧱 1. Vytvoření tabulky
-CREATE TABLE orders (
-  order_id INTEGER,
-  customer_id INTEGER,
-  amount INTEGER
-);
-
-➕ 2. Vložení dat
+➕ 5. Vložení dat
 INSERT INTO orders VALUES (1, 1, 500);
 INSERT INTO orders VALUES (2, 2, 300);
 INSERT INTO orders VALUES (3, 1, 700);
-
-📄 3. Základní výpis
+📊 6. SELECT – výpis dat
 SELECT *
 FROM orders;
 
-👉 vypíše všechny sloupce a řádky
+👉 * = všechny sloupce
 
-🔍 4. Filtrace (WHERE)
+🎯 7. WHERE – filtr řádků
 SELECT *
 FROM orders
 WHERE amount > 400;
 
-👉 filtruje řádky (jako filtr v Excelu), fuktruje před agregací
+👉 filtruje před agregací
 
-🔢 5. COUNT
-SELECT COUNT(*)
-FROM orders;
-
-👉 počet řádků
-
-SELECT COUNT(*)
-FROM orders
-WHERE customer_id = 1;
-
-👉 počet řádků splňujících podmínku
-
-➕ 6. SUM
-SELECT SUM(amount)
-FROM orders;
-
-👉 součet hodnot
-
-🧠 7. GROUP BY (základ)
-SELECT customer_id, SUM(amount)
-FROM orders
-GROUP BY customer_id;
-
-👉 agregace podle skupiny (jako kontingenčka), rozdělí data do skupin a umožní nad nimi výpočty
-
-🧮 Agregační funkce
+🔢 8. Agregační funkce
 COUNT(*)        -- počet řádků
 COUNT(sloupec)  -- ignoruje NULL
 SUM(amount)     -- součet
 AVG(amount)     -- průměr
+📊 9. GROUP BY – agregace
+SELECT customer_id, SUM(amount)
+FROM orders
+GROUP BY customer_id;
 
-📊 8. ORDER BY
+👉 rozděluje data do skupin (jako kontingenčka)
+
+🔎 10. HAVING – filtr skupin
 SELECT customer_id, SUM(amount)
 FROM orders
 GROUP BY customer_id
-ORDER BY SUM(amount) DESC;
+HAVING SUM(amount) > 1000;
 
-👉 seřazení výsledků
+👉 filtruje po agregaci
 
-🎯 9. DISTINCT
+🧠 WHERE vs HAVING
+WHERE	HAVING
+filtr řádků	filtr skupin
+před GROUP BY	po GROUP BY
+nefunguje s AVG	funguje
+🎯 11. DISTINCT – unikátní hodnoty
 SELECT DISTINCT customer_id
 FROM orders;
-
-👉 unikátní hodnoty
-
-🔗 10. JOIN (spojení tabulek)
+🔢 12. COUNT vs COUNT(DISTINCT)
+COUNT(*)                      -- všechny řádky
+COUNT(customer_id)            -- bez NULL
+COUNT(DISTINCT customer_id)  -- unikátní hodnoty
+📈 13. ORDER BY – řazení
+ORDER BY amount DESC;
+🔗 14. JOIN – spojení tabulek
 SELECT *
 FROM orders
 JOIN customers
 ON orders.customer_id = customers.customer_id;
 
-👉 spojí data z více tabulek přes klíč
+👉 spojuje tabulky přes společný klíč
+
 🧠 JOIN (lepší praxe – aliasy)
 SELECT 
     c.name,
@@ -215,77 +109,74 @@ FROM orders o
 JOIN customers c 
 ON o.customer_id = c.customer_id;
 
-🔥 11. JOIN + GROUP BY (klíčový pattern)
+👉 čitelnější a standard v praxi
+
+📊 15. JOIN + GROUP BY (nejdůležitější pattern)
 💰 Kolik utratil zákazník
 SELECT
-  customers.name,
-  SUM(orders.amount) AS total_spent
-FROM orders
-JOIN customers
-ON orders.customer_id = customers.customer_id
-GROUP BY customers.name
-ORDER BY total_spent DESC;
-📦 Kolik má zákazník objednávek
-SELECT
-  customers.name,
-  COUNT(*) AS total_orders
-FROM orders
-JOIN customers
-ON orders.customer_id = customers.customer_id
-GROUP BY customers.name
-ORDER BY total_orders DESC;
-
-⚠️ 12. COUNT(*) vs COUNT(sloupec)
-COUNT(*) → počítá všechny řádky ✅ (nejčastější)
-COUNT(sloupec) → počítá jen ne-NULL hodnoty
-
-👉 doporučení:
-➡️ používej hlavně COUNT(*)
-
-🔎 HAVING – filtr skupin
-SELECT 
     c.name,
     SUM(o.amount) AS total_spent
 FROM orders o
 JOIN customers c ON o.customer_id = c.customer_id
 GROUP BY c.name
-HAVING SUM(o.amount) > 1000;
-
-👉 filtruje po agregaci
-
-🧠 WHERE vs HAVING
-WHERE	HAVING
-filtr řádků	filtr skupin
-před GROUP BY	po GROUP BY
-nefunguje s AVG, SUM	funguje
-🔢 COUNT vs COUNT(DISTINCT)
-COUNT(*)                         -- všechny řádky
-COUNT(DISTINCT customer_id)     -- unikátní zákazníci
-
-⚡ Pořadí SQL
-FROM
-JOIN
-WHERE
-GROUP BY
-HAVING
+ORDER BY total_spent DESC;
+📦 Kolik má zákazník objednávek
 SELECT
-ORDER BY
+    c.name,
+    COUNT(*) AS total_orders
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.name
+ORDER BY total_orders DESC;
+📈 Průměrná hodnota objednávky
+SELECT
+    c.name,
+    AVG(o.amount) AS avg_order
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.name;
+🔥 16. HAVING – pokročilé použití
+zákazníci s více než 1 objednávkou
+HAVING COUNT(*) > 1;
+zákazníci s vysokou útratou
+HAVING SUM(o.amount) > 1000;
+kombinace podmínek (real case)
+SELECT
+    c.name,
+    COUNT(*) AS total_orders,
+    AVG(o.amount) AS avg_revenue
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.name
+HAVING COUNT(*) > 1
+   AND AVG(o.amount) > 400
+ORDER BY avg_revenue DESC;
 
-🧠 Klíčové principy
-SELECT → co chci vidět
-FROM → odkud beru data
-WHERE → filtr řádků
-GROUP BY → rozdělení do skupin
-HAVING → filtr skupin
-ORDER BY → seřazení
-JOIN → spojení tabulek
+👉 typický business use-case (segmentace zákazníků)
 
+📊 17. CSV / Excel → SQL
+
+👉 Excel → uložit jako .csv
+
+Použití:
+
+Power BI
+Python (pandas)
+import do databáze
+
+👉 CSV = most mezi nástroji
+
+🧠 18. Jak přemýšlet v SQL
+
+SQL = popis výsledku
+
+👉 ne „jak to udělat“
+👉 ale „co chci vidět“
+
+⚡ 19. Mentální model
 vezmi data (FROM)
-vyfiltruj (WHERE)
+filtruj (WHERE)
 seskup (GROUP BY)
-spočítej
-vyfiltruj skupiny (HAVING)
+spočítej (SUM, COUNT…)
+filtruj skupiny (HAVING)
 seřaď (ORDER BY)
-JOIN (spojování tabulek)
-pokročilé filtry
-práce s více tabulkami
