@@ -1,24 +1,25 @@
 # sql_fiddle_examples.sql
 
--- CREATE TABLES
-CREATE TABLE orders (
-    order_id INTEGER,
-    customer_id INTEGER,
-    amount INTEGER
-);
+**Schema (MySQL v5.7)**
 
-CREATE TABLE customers (
-    customer_id INTEGER,
-    name TEXT
-);
-
--- INSERT DATA
-INSERT INTO orders VALUES (1, 1, 500);
-INSERT INTO orders VALUES (2, 2, 300);
-INSERT INTO orders VALUES (3, 1, 700);
-
-INSERT INTO customers VALUES (1, 'Jan');
-INSERT INTO customers VALUES (2, 'Eva');
+    CREATE TABLE orders (
+        order_id INTEGER,
+        customer_id INTEGER,
+        amount INTEGER
+    );
+    
+    CREATE TABLE customers (
+        customer_id INTEGER,
+        name TEXT
+    );
+    
+    -- INSERT DATA
+    INSERT INTO orders VALUES (1, 1, 500);
+    INSERT INTO orders VALUES (2, 2, 300);
+    INSERT INTO orders VALUES (3, 1, 700);
+    
+    INSERT INTO customers VALUES (1, 'Jan');
+    INSERT INTO customers VALUES (2, 'Eva');
 
 -- JOIN + AGGREGATION
 SELECT customers.name, AVG(amount)
@@ -93,3 +94,70 @@ FROM orders o
 JOIN customers c on o.customer_id = c.customer_id
 GROUP BY c.name
 HAVING total_orders >= 2;
+
+---
+
+**Query #1**
+
+    SELECT
+       c.name,
+       SUM(o.amount) AS total_revenue
+    FROM orders o
+    JOIN customers c on o.customer_id = c.customer_id
+    GROUP BY c.name
+    ORDER BY SUM(o.amount) DESC
+    LIMIT 1;
+
+| name | total_revenue |
+| ---- | ------------- |
+| Jan  | 1200          |
+
+---
+**Query #2**
+
+    SELECT
+       c.name,
+       COUNT(*) AS total_orders
+    FROM orders o
+    JOIN customers c on o.customer_id = c.customer_id
+    GROUP BY c.name
+    ORDER BY total_orders DESC;
+
+| name | total_orders |
+| ---- | ------------ |
+| Jan  | 2            |
+| Eva  | 1            |
+
+---
+**Query #3**
+
+    SELECT
+       c.name,
+       ROUND(AVG(o.amount), 0) AS avg_order_value
+    FROM orders o
+    JOIN customers c on o.customer_id = c.customer_id
+    GROUP BY c.name
+    ORDER BY avg_order_value DESC;
+
+| name | avg_order_value |
+| ---- | --------------- |
+| Jan  | 600             |
+| Eva  | 300             |
+
+---
+**Query #4**
+
+    SELECT
+       c.name,
+       COUNT(*) AS total_orders,
+       ROUND(AVG(o.amount), 0) AS avg_order_value
+    FROM orders o
+    JOIN customers c on o.customer_id = c.customer_id
+    GROUP BY c.name
+    HAVING COUNT(*) > 1 AND ROUND(AVG(o.amount), 0) > 400;
+
+| name | total_orders | avg_order_value |
+| ---- | ------------ | --------------- |
+| Jan  | 2            | 600             |
+
+
