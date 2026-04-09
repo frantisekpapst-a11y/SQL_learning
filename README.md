@@ -1,8 +1,8 @@
 # 📊 SQL Learning Journey
 
-Tento repozitář obsahuje moje první kroky v SQL – od základů po práci s více tabulkami.
+Tento repozitář dokumentuje moji cestu učení SQL – od základů až po první analytické case study.
 
-Cíl: stát se junior data analytikem 🚀
+🎯 **Cíl:** stát se junior data analytikem 🚀
 
 ---
 
@@ -10,22 +10,24 @@ Cíl: stát se junior data analytikem 🚀
 
 - `sql-cheatsheet.md` → přehled SQL (teorie + syntaxe)
 - `sql_fiddle_examples.sql` → praktické ukázky + cvičení
+- `case_study_1.sql` → první analytická case study
 
 ---
 
 ## 🧠 Co se učím
 
 - SELECT, WHERE, GROUP BY
-- agregace (SUM, COUNT, AVG)
+- agregační funkce (SUM, COUNT, AVG)
 - JOIN (spojování tabulek)
 - HAVING (filtrace skupin)
 - práce s daty jako v reálném businessu
+- přemýšlení nad daty (SQL jako nástroj pro analýzu)
 
 ---
 
 ## 📊 Dataset
 
-Používám jednoduchý dataset:
+Používám jednoduchý dataset pro pochopení základních principů:
 
 ### orders
 | order_id | customer_id | amount |
@@ -44,70 +46,70 @@ Používám jednoduchý dataset:
 
 ## 🧪 Mini úkoly (practice)
 
-### 🟢 1. Základní výpis
-Vypiš všechny objednávky
+### 🟢 Základy
+1. Vypsat všechny objednávky  
+2. Najít objednávky nad 400  
+3. Spočítat počet objednávek  
+
+### 🟡 Agregace
+4. Kolik utratil každý zákazník  
+5. Kolik má kdo objednávek  
+6. Průměrná hodnota objednávky  
+
+### 🟠 Pokročilejší práce s daty
+7. Zákazníci s více než 1 objednávkou  
+8. Zákazníci s útratou > 1000  
+
+### 🔴 Real case
+9. Zákazníci, kteří:
+   - mají více než 1 objednávku  
+   - a zároveň mají průměrnou objednávku > 400  
 
 ---
 
-### 🟢 2. Filtrace
-Najdi objednávky nad 400
+## 📊 Case Study
 
----
+Tato case study ukazuje základní analytické scénáře nad daty:
 
-### 🟢 3. Kolik je objednávek
-Spočítej počet objednávek
+1. **Top customer**  
+   → zákazník s nejvyšší celkovou útratou  
 
----
+2. **Customer activity**  
+   → počet objednávek na zákazníka  
 
-### 🟡 4. Součet objednávek podle zákazníka
-👉 Kolik utratil každý zákazník
+3. **Average order value**  
+   → průměrná hodnota objednávky  
 
----
+4. **VIP customers**  
+   → zákazníci s více objednávkami a vysokou útratou  
 
-### 🟡 5. Počet objednávek podle zákazníka
-👉 Kolik má kdo objednávek
-
----
-
-### 🟡 6. Průměrná hodnota objednávky
-👉 AVG amount podle zákazníka
-
----
-
-### 🟠 7. Filtrace skupin
-👉 Najdi zákazníky s více než 1 objednávkou
-
----
-
-### 🟠 8. Velcí zákazníci
-👉 zákazníci s útratou > 1000
-
----
-
-### 🔴 9. Kombinace podmínek (REAL CASE)
-👉 zákazníci kteří:
-- mají více než 1 objednávku
-- a zároveň průměrná objednávka > 400
+5. **Low-value customers**  
+   → zákazníci s nízkou průměrnou hodnotou objednávky  
 
 ---
 
 ## 🧠 Jak nad tím přemýšlím
 
-SQL = popis výsledku
+SQL není programování v klasickém smyslu.
 
-1. odkud beru data (FROM)
-2. spojím tabulky (JOIN)
-3. filtruju (WHERE)
-4. seskupím (GROUP BY)
-5. počítám (SUM, COUNT…)
-6. filtruju skupiny (HAVING)
-7. seřadím (ORDER BY)
+👉 Je to způsob, jak se ptát na data:
+
+- odkud beru data (FROM)
+- jak je spojím (JOIN)
+- co odfiltruju (WHERE)
+- jak je rozdělím (GROUP BY)
+- co spočítám (SUM, COUNT, AVG)
+- co z toho vyberu (HAVING)
+- jak to seřadím (ORDER BY)
 
 ---
 
 ## 🚀 Další kroky
 
+- LEFT JOIN (práce s chybějícími daty)
 - složitější JOINy
 - více tabulek
+- reálné datasety
+- Power BI / Python napojení
 - reálné datasety
 - Power BI / Python napojení
