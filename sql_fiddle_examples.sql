@@ -160,4 +160,44 @@ HAVING total_orders >= 2;
 | ---- | ------------ | --------------- |
 | Jan  | 2            | 600             |
 
+**Schema (MySQL v5.7)**
+
+    CREATE TABLE orders (
+            order_id INTEGER,
+            customer_id INTEGER,
+            amount INTEGER
+        );
+        
+        CREATE TABLE customers (
+            customer_id INTEGER,
+            name TEXT
+        );
+        
+        -- INSERT DATA
+        INSERT INTO orders VALUES (1, 1, 500);
+        INSERT INTO orders VALUES (2, 2, 300);
+        INSERT INTO orders VALUES (3, 1, 700);
+        
+        INSERT INTO customers VALUES (1, 'Jan');
+        INSERT INTO customers VALUES (2, 'Eva');
+        INSERT INTO customers VALUES (3, 'Petr');
+
+---
+
+**Query #1**
+
+    SELECT
+       c.name,
+       COUNT(o.order_id) AS total_orders
+    FROM customers c
+    LEFT JOIN orders o on c.customer_id = o.customer_id
+    GROUP BY c.name
+    HAVING COUNT(o.order_id) <= 1
+    ORDER BY total_orders ASC;
+
+| name | total_orders |
+| ---- | ------------ |
+| Petr | 0            |
+| Eva  | 1            |
+
 
