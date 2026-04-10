@@ -217,3 +217,17 @@ HAVING total_orders >= 2;
 | Eva  | 0            |
 | Petr | 0            |
 
+---
+**Query #2**
+
+    SELECT
+       c.name
+    FROM customers c
+    LEFT JOIN orders o on c.customer_id = o.customer_id
+    WHERE o.order_id IS NULL;
+
+| name |
+| ---- |
+| Petr |
+
+
