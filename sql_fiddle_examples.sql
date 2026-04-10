@@ -200,4 +200,20 @@ HAVING total_orders >= 2;
 | Petr | 0            |
 | Eva  | 1            |
 
+---
+**Query #2**
+
+    SELECT
+       c.name,
+       COUNT(o.order_id) AS total_orders
+    FROM customers c
+    LEFT JOIN orders o on c.customer_id = o.customer_id AND o.amount > 400
+    GROUP BY c.name
+    HAVING COUNT(o.order_id) <= 1
+    ORDER BY total_orders ASC;
+
+| name | total_orders |
+| ---- | ------------ |
+| Eva  | 0            |
+| Petr | 0            |
 
