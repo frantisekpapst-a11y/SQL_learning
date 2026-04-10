@@ -230,4 +230,22 @@ HAVING total_orders >= 2;
 | ---- |
 | Petr |
 
+---
+
+**Query #3**
+
+    SELECT
+       c.name,
+       COUNT(*) AS total_orders
+    FROM orders o
+    JOIN customers c on o.customer_id = c.customer_id
+    GROUP BY c.name
+    HAVING MAX(o.amount) <= 500
+    ORDER BY c.name ASC;
+
+| name | total_orders |
+| ---- | ------------ |
+| Eva  | 1            |
+
+
 
