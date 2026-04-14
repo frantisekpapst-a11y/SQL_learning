@@ -1,6 +1,6 @@
 # 📊 SQL Learning Journey
 
-Tento repozitář dokumentuje moji cestu učení SQL – od základů až po první analytické case study.
+Tento repozitář dokumentuje moji cestu učení SQL – od základů až po první analytické case studies.
 
 🎯 **Cíl:** stát se junior data analytikem 🚀
 
@@ -10,7 +10,8 @@ Tento repozitář dokumentuje moji cestu učení SQL – od základů až po prv
 
 - `sql-cheatsheet.md` → přehled SQL (teorie + syntaxe)
 - `sql_fiddle_examples.sql` → praktické ukázky + cvičení
-- `case_study_1.sql` → první analytická case study
+- `case_study_1.sql` → základní analytická case study (customers & orders)
+- `case_study_2.sql` → pokročilejší analýza (customers, orders, products)
 
 ---
 
@@ -18,16 +19,18 @@ Tento repozitář dokumentuje moji cestu učení SQL – od základů až po prv
 
 - SELECT, WHERE, GROUP BY
 - agregační funkce (SUM, COUNT, AVG)
-- JOIN (spojování tabulek)
+- JOIN (INNER JOIN, LEFT JOIN)
 - HAVING (filtrace skupin)
-- práce s daty jako v reálném businessu
+- práce s NULL hodnotami (COALESCE)
+- práce s více tabulkami
+- výpočty v SQL (např. revenue = quantity × price)
 - přemýšlení nad daty (SQL jako nástroj pro analýzu)
 
 ---
 
 ## 📊 Dataset
 
-Používám jednoduchý dataset pro pochopení základních principů:
+Používám jednoduché datasety pro pochopení základních principů:
 
 ### orders
 | order_id | customer_id | amount |
@@ -41,6 +44,7 @@ Používám jednoduchý dataset pro pochopení základních principů:
 |-------------|------|
 | 1           | Jan  |
 | 2           | Eva  |
+| 3           | Petr |
 
 ---
 
@@ -67,9 +71,9 @@ Používám jednoduchý dataset pro pochopení základních principů:
 
 ---
 
-## 📊 Case Study
+## 📊 Case Study 1 – Customer Analysis
 
-Tato case study ukazuje základní analytické scénáře nad daty:
+Analýza základního chování zákazníků:
 
 1. **Top customer**  
    → zákazník s nejvyšší celkovou útratou  
@@ -88,11 +92,32 @@ Tato case study ukazuje základní analytické scénáře nad daty:
 
 ---
 
+## 📊 Case Study 2 – Product & Customer Analysis
+
+Analýza prodeje napříč více tabulkami (customers, orders, products):
+
+1. **Product performance**  
+   → kolik kusů každého produktu se prodalo  
+
+2. **Revenue per product**  
+   → kolik každý produkt vydělal  
+
+3. **Customer revenue**  
+   → kolik utratil každý zákazník  
+
+4. **Revenue by category**  
+   → kolik utratil zákazník v jednotlivých kategoriích  
+
+5. **Top category per customer**  
+   → kategorie, ve které zákazník utratil nejvíce  
+
+---
+
 ## 🧠 Jak nad tím přemýšlím
 
-SQL není programování v klasickém smyslu.
+SQL není jen syntaxe – je to způsob, jak analyzovat data.
 
-👉 Je to způsob, jak se ptát na data:
+👉 Postup:
 
 - odkud beru data (FROM)
 - jak je spojím (JOIN)
@@ -106,10 +131,9 @@ SQL není programování v klasickém smyslu.
 
 ## 🚀 Další kroky
 
-- LEFT JOIN (práce s chybějícími daty)
-- složitější JOINy
-- více tabulek
+- pokročilé JOIN scénáře
+- subquery (poddotazy)
+- komplexnější case studies
 - reálné datasety
-- Power BI / Python napojení
-- reálné datasety
-- Power BI / Python napojení
+- Power BI (vizualizace dat)
+- Python (pandas, data analysis)
