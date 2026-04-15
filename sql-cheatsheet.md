@@ -1,9 +1,6 @@
-📘 SQL Basics – Data Analyst Cheat Sheet (v5)
-# 📘 SQL Basics – Data Analyst Cheat Sheet
+📘 SQL Basics – Data Analyst Cheat Sheet (v6)
 
-## 🧠 1. Struktura SQL dotazu
-
-```sql
+🧠 1. Struktura SQL dotazu
 SELECT co_chci_videt
 FROM odkud_beru_data
 WHERE podminka
@@ -22,314 +19,183 @@ HAVING
 SELECT
 ORDER BY
 
-👉 SELECT se píše první, ale vykonává se až téměř poslední.
-👉 Proto aliasy nefungují ve WHERE.
+👉 SELECT se píše první, ale vykonává se až téměř poslední
+👉 aliasy proto nefungují ve WHERE
 
 ✍️ 3. Syntaxe
-Čárka (,) → odděluje sloupce
-Středník (;) → ukončuje dotaz
-Mezery a odřádkování → jen pro čitelnost
-
-✅ dobrá praxe:
-
-SELECT *
-FROM orders;
-🧱 4. Vytvoření tabulky
-CREATE TABLE orders (
-    order_id INTEGER,
-    customer_id INTEGER,
-    amount INTEGER
-);
-➕ 5. Vložení dat
-INSERT INTO orders VALUES (1, 1, 500);
-INSERT INTO orders VALUES (2, 2, 300);
-INSERT INTO orders VALUES (3, 1, 700);
-📊 6. SELECT
+, → odděluje sloupce
+; → ukončuje dotaz
+mezery → jen čitelnost
+📊 4. SELECT
 SELECT *
 FROM orders;
 
 👉 * = všechny sloupce
 
-🎯 7. WHERE – filtr řádků
-SELECT *
-FROM orders
-WHERE amount > 400;
+🎯 5. WHERE
+WHERE amount > 400
 
 👉 filtruje řádky před agregací
 
-🔢 8. Agregační funkce
-COUNT(*)        -- všechny řádky
-COUNT(sloupec)  -- ignoruje NULL
-SUM(amount)     -- součet
-AVG(amount)     -- průměr
-MAX(amount)     -- maximum
-MIN(amount)     -- minimum
-📊 9. GROUP BY
+🔢 6. Agregace
+COUNT(*)
+COUNT(sloupec)
+SUM(amount)
+AVG(amount)
+MAX(amount)
+MIN(amount)
+
+📊 7. GROUP BY
 SELECT customer_id, SUM(amount)
 FROM orders
 GROUP BY customer_id;
 
 👉 rozdělí data do skupin
 
-🔎 10. HAVING – filtr skupin
-SELECT customer_id, SUM(amount)
-FROM orders
-GROUP BY customer_id
-HAVING SUM(amount) > 1000;
+🔎 8. HAVING
+HAVING SUM(amount) > 1000
 
 👉 filtruje skupiny po agregaci
 
-🧠 11. WHERE vs HAVING
+🧠 9. WHERE vs HAVING
 WHERE	HAVING
 filtr řádků	filtr skupin
 před GROUP BY	po GROUP BY
-bez agregace	s agregací
 
-👉 WHERE mění vstupní data
-👉 HAVING kontroluje výsledek po výpočtu
-
-🎯 12. DISTINCT
-SELECT DISTINCT customer_id
-FROM orders;
-
-👉 vrátí unikátní hodnoty
-
-🔢 13. COUNT vs COUNT(DISTINCT)
-COUNT(*)                      -- všechny řádky
-COUNT(customer_id)            -- bez NULL
-COUNT(DISTINCT customer_id)   -- unikátní hodnoty
-📈 14. ORDER BY
-ORDER BY amount DESC;
-
-👉 aliasy zde většinou fungují ✅
-
-🔗 15. JOIN (INNER JOIN)
-SELECT *
-FROM orders o
+🔗 10. JOIN
+INNER JOIN
 JOIN customers c
-    ON o.customer_id = c.customer_id;
+ON o.customer_id = c.customer_id
 
-👉 vrátí jen shody v obou tabulkách
+👉 jen shody
 
-⬅️ 16. LEFT JOIN
-SELECT *
-FROM customers c
+LEFT JOIN
 LEFT JOIN orders o
-    ON c.customer_id = o.customer_id;
+ON c.customer_id = o.customer_id
 
-👉 vrátí:
+👉 vše zleva + shody zprava + NULL
 
-všechny řádky z levé tabulky
-odpovídající řádky z pravé tabulky
-pokud nic neexistuje → NULL
-🔍 Zákazníci bez objednávek
-SELECT c.name
-FROM customers c
-LEFT JOIN orders o
-    ON c.customer_id = o.customer_id
-WHERE o.customer_id IS NULL;
+🧠 11. LEFT JOIN – WHERE vs ON
 
-👉 LEFT JOIN + WHERE ... IS NULL = hledání chybějících dat / neexistujících vazeb
+👉 filtr v WHERE může zrušit LEFT JOIN
 
-🧠 17. LEFT JOIN: WHERE vs ON
-❌ ŠPATNĚ
-SELECT
-    c.name,
-    COUNT(o.order_id)
-FROM customers c
-LEFT JOIN orders o
-    ON c.customer_id = o.customer_id
+-- ❌
 WHERE o.amount > 400
-GROUP BY c.name;
+-- ✅
+ON c.customer_id = o.customer_id
+AND o.amount > 400
 
-👉 WHERE může „rozbít“ LEFT JOIN a změnit ho prakticky na INNER JOIN
-
-✅ SPRÁVNĚ
-SELECT
-    c.name,
-    COUNT(o.order_id)
-FROM customers c
-LEFT JOIN orders o
-    ON c.customer_id = o.customer_id
-   AND o.amount > 400
-GROUP BY c.name;
-
-👉 když chceš zachovat všechny řádky z levé tabulky, filtr na pravou tabulku často patří do ON
-
-🧠 18. COUNT(*) vs COUNT(sloupec) u LEFT JOIN
-výraz	co počítá
+🧠 12. COUNT u LEFT JOIN
+výraz	co dělá
 COUNT(*)	všechny řádky
-COUNT(o.customer_id)	jen existující hodnoty
+COUNT(sloupec)	jen nenull
 
-👉 proto:
-
-HAVING COUNT(o.customer_id) = 0
-
-funguje ✅
-
-ale:
-
-HAVING COUNT(*) = 0
-
-nefunguje ❌
-
-👉 u LEFT JOIN má zákazník bez objednávky pořád jeden řádek s NULL
-
-🧠 19. Alias pravidla
-část SQL	alias funguje?
+🧠 13. Alias pravidla
+část	funguje
 SELECT	✅
 WHERE	❌
-GROUP BY	❌ / někdy podle DB
-HAVING	⚠️ někdy
+GROUP BY	⚠️
+HAVING	⚠️
 ORDER BY	✅
 
 👉 alias vzniká až v SELECT
 
-📊 20. JOIN + GROUP BY – základní patterny
-💰 Revenue
-SELECT
-    c.name,
-    SUM(o.amount) AS total_revenue
-FROM orders o
-JOIN customers c
-    ON o.customer_id = c.customer_id
-GROUP BY c.name;
-📦 Počet objednávek
-SELECT
-    c.name,
-    COUNT(*) AS total_orders
-FROM orders o
-JOIN customers c
-    ON o.customer_id = c.customer_id
-GROUP BY c.name;
-📈 Průměr
-SELECT
-    c.name,
-    ROUND(AVG(o.amount), 0) AS avg_order
-FROM orders o
-JOIN customers c
-    ON o.customer_id = c.customer_id
-GROUP BY c.name;
-🔥 21. HAVING – kombinace podmínek
-SELECT
-    c.name,
-    COUNT(*) AS total_orders,
-    AVG(o.amount) AS avg_order
-FROM orders o
-JOIN customers c
-    ON o.customer_id = c.customer_id
-GROUP BY c.name
-HAVING COUNT(*) > 1
-   AND AVG(o.amount) > 400;
+🧠 14. Proč nejde alias ve WHERE
+SELECT ..., ROW_NUMBER() AS rn
+FROM ...
+WHERE rn = 1  -- ❌
 
-👉 typický business case: VIP zákazníci
+👉 protože:
 
-⚡ 22. WHERE + HAVING společně
-SELECT
-    c.name,
-    COUNT(*) AS total_orders
-FROM orders o
-JOIN customers c
-    ON o.customer_id = c.customer_id
-WHERE o.amount > 100
-GROUP BY c.name
-HAVING COUNT(*) > 1;
+WHERE běží dřív než SELECT
+rn ještě neexistuje
 
-👉 WHERE = filtr vstupu
-👉 HAVING = filtr výsledku
+🧠 15. Subquery (důležité!)
+SELECT *
+FROM (
+    SELECT ..., ROW_NUMBER() AS rn
+    FROM sales
+) t
+WHERE rn = 1;
 
-🔥 23. Častá chyba: WHERE vs HAVING
-❌ ŠPATNĚ
-WHERE o.amount <= 500
+👉 vytvoříš mezivýsledek a pak filtruješ
 
-👉 odstraníš řádky ještě před výpočtem
-
-✅ SPRÁVNĚ
-HAVING MAX(o.amount) <= 500
-
-👉 kontroluješ skutečný stav dat po agregaci
-
-🧠 24. COALESCE – práce s NULL
-COALESCE(SUM(o.amount), 0) AS total_revenue
-
-👉 když je výsledek NULL, nahradí ho hodnotou 0
-
-Příklad:
-
-zákazník bez objednávek → revenue = 0 místo NULL
-📦 25. Výpočty v SQL
-
-Příklad:
-
-o.quantity * p.price
-
-👉 výpočet na jednom řádku
-
-A pak agregace:
-
-SUM(o.quantity * p.price) AS total_revenue
-
-👉 nejdřív spočítáš řádek
-👉 pak to sečteš
-
-❌ ŠPATNĚ
-SUM(o.quantity) * p.price
-✅ SPRÁVNĚ
+📦 16. Výpočty
 SUM(o.quantity * p.price)
-🧠 26. JOIN více tabulek
-SELECT
-    c.name,
-    COALESCE(SUM(o.quantity * p.price), 0) AS total_revenue
-FROM customers c
-LEFT JOIN orders o
-    ON c.customer_id = o.customer_id
-LEFT JOIN products p
-    ON o.product_id = p.product_id
-GROUP BY c.name;
 
-👉 umíš spojit:
+👉 nejdřív řádek → pak agregace
 
-customers
-orders
-products
-🏆 27. TOP per group (pokročilý pattern)
+🧠 17. COALESCE
+COALESCE(SUM(amount), 0)
 
-Typický problém:
+👉 NULL → 0
 
-👉 „Najdi top kategorii pro každého zákazníka“
+🔥 18. TOP per group (MAX + JOIN)
+WITH t AS (
+    SELECT customer, category, SUM(revenue) AS total
+    FROM sales
+    GROUP BY customer, category
+)
+SELECT *
+FROM t
+JOIN (
+    SELECT customer, MAX(total) AS max_total
+    FROM t
+    GROUP BY customer
+) m
+ON t.customer = m.customer
+AND t.total = m.max_total;
 
-Logika:
+👉 vrací všechny top (i při shodě)
 
-spočítat revenue podle kategorií
-najít maximum pro každého zákazníka
-spojit výsledek zpátky
+🚀 19. TOP per group (ROW_NUMBER)
+SELECT *
+FROM (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY customer
+            ORDER BY revenue DESC
+        ) AS rn
+    FROM sales
+) t
+WHERE rn = 1;
 
-Tohle je pokročilejší pattern, ale velmi důležitý pro praxi.
+👉 vrací jen 1 řádek na skupinu
 
-🧠 28. SQL mindset
+🧠 20. ROW_NUMBER vs RANK
+funkce	chování
+ROW_NUMBER	vždy 1,2,3 → rozbije remízu
+RANK	stejné hodnoty = stejné pořadí
 
-SQL ≠ klasické programování
-SQL = popis výsledku
+🔥 21. RANK (vrátí remízy)
+RANK() OVER (
+    PARTITION BY customer
+    ORDER BY revenue DESC
+)
 
-👉 nepíšu postup krok za krokem jako v Pythonu
-👉 říkám, jaký výsledek chci dostat
+👉 WHERE rank = 1 → více řádků při shodě
 
-⚡ 29. Mentální model
+⚡ 22. Mentální model
 vezmi data (FROM)
-spoj tabulky (JOIN)
-filtruj řádky (WHERE)
-seskup data (GROUP BY)
-počítej (SUM, COUNT, AVG...)
+spoj (JOIN)
+filtruj (WHERE)
+seskup (GROUP BY)
+počítej
 filtruj skupiny (HAVING)
-seřaď výsledek (ORDER BY)
-🚀 30. Rychlé rozhodování
+seřaď
+
+🚀 23. Rychlé rozhodování
 otázka	řešení
-kolik?	COUNT
-kolik celkem?	SUM
-průměr?	AVG
-maximum?	MAX
-kdo nemá?	LEFT JOIN + WHERE ... IS NULL
-filtr před výpočtem	WHERE
-filtr po výpočtu	HAVING
-nahradit NULL	COALESCE
-top něco pro každého	MAX(...) + mezitabulka + JOIN
+kolik	COUNT
+kolik celkem	SUM
+průměr	AVG
+max	MAX
+kdo nemá	LEFT JOIN + IS NULL
+filtr před	WHERE
+filtr po	HAVING
+NULL → 0	COALESCE
+top per group	ROW_NUMBER / MAX + JOIN
+
+🧠 24. SQL mindset
+
+👉 SQL = popis výsledku, ne postup
