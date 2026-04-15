@@ -247,5 +247,48 @@ HAVING total_orders >= 2;
 | ---- | ------------ |
 | Eva  | 1            |
 
+---
+    
+**Schema (MySQL v8)**
 
+    CREATE TABLE sales (
+        customer VARCHAR(50),
+        category VARCHAR(50),
+        revenue INT
+    );
+    
+    INSERT INTO sales (customer, category, revenue) VALUES
+    ('A', 'Shoes', 100),
+    ('A', 'Hats', 200),
+    ('A', 'Bags', 150),
+    ('B', 'Shoes', 300),
+    ('B', 'Hats', 50),
+    ('C', 'Bags', 400),
+    ('C', 'Shoes', 400);
+
+---
+
+**Query #1**
+
+    SELECT *
+    FROM (
+    	SELECT
+        	customer,
+        	category,
+        	revenue,
+        	ROW_NUMBER() OVER (
+            	PARTITION BY customer
+            	ORDER BY revenue DESC
+        	) AS rn
+    	FROM sales
+    ) t
+    WHERE rn = 1;
+
+| customer | category | revenue | rn  |
+| -------- | -------- | ------- | --- |
+| A        | Hats     | 200     | 1   |
+| B        | Shoes    | 300     | 1   |
+| C        | Bags     | 400     | 1   |
+
+---
 
