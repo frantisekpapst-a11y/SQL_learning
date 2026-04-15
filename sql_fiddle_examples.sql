@@ -270,7 +270,10 @@ HAVING total_orders >= 2;
 
 **Query #1**
 
-    SELECT *
+    SELECT
+    	customer,
+        category,
+        revenue
     FROM (
     	SELECT
         	customer,
@@ -284,11 +287,38 @@ HAVING total_orders >= 2;
     ) t
     WHERE rn = 1;
 
-| customer | category | revenue | rn  |
-| -------- | -------- | ------- | --- |
-| A        | Hats     | 200     | 1   |
-| B        | Shoes    | 300     | 1   |
-| C        | Bags     | 400     | 1   |
+| customer | category | revenue |
+| -------- | -------- | ------- |
+| A        | Hats     | 200     |
+| B        | Shoes    | 300     |
+| C        | Bags     | 400     |
+
+---
+**Query #2**
+
+    SELECT
+    	customer,
+        category,
+        revenue
+    FROM (
+    	SELECT
+        	customer,
+        	category,
+        	revenue,
+        	RANK() OVER (
+            	PARTITION BY customer
+            	ORDER BY revenue DESC
+        	) AS rn
+    	FROM sales
+    ) t
+    WHERE rn = 1;
+
+| customer | category | revenue |
+| -------- | -------- | ------- |
+| A        | Hats     | 200     |
+| B        | Shoes    | 300     |
+| C        | Bags     | 400     |
+| C        | Shoes    | 400     |
 
 ---
 
