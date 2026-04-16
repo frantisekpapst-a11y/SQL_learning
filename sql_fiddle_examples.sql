@@ -322,3 +322,96 @@ HAVING total_orders >= 2;
 
 ---
 
+**Schema (MySQL v8)**
+
+    CREATE TABLE customers (
+        customer_id INT,
+        name VARCHAR(50)
+    );
+    
+    INSERT INTO customers VALUES
+    (1, 'Anna'),
+    (2, 'Petr'),
+    (3, 'Eva');
+    
+    CREATE TABLE orders (
+        order_id INT,
+        customer_id INT
+    );
+    
+    INSERT INTO orders VALUES
+    (1, 1),
+    (2, 1),
+    (3, 2),
+    (4, 3);
+    
+    CREATE TABLE order_items (
+        order_id INT,
+        product_id INT,
+        quantity INT
+    );
+    
+    INSERT INTO order_items VALUES
+    (1, 1, 2),  -- Anna
+    (1, 2, 1),
+    (2, 1, 1),
+    (3, 3, 3),  -- Petr
+    (4, 2, 2);  -- Eva
+    
+    
+    CREATE TABLE products (
+        product_id INT,
+        category VARCHAR(50),
+        price INT
+    );
+    
+    INSERT INTO products VALUES
+    (1, 'Shoes', 100),
+    (2, 'Hats', 200),
+    (3, 'Bags', 300);
+
+---
+
+**Query #1**
+
+    SELECT
+    	name,
+        category,
+        total_revenue
+    FROM (
+    	SELECT
+    		name,
+        	category,
+        	total_revenue,
+        	ROW_NUMBER() OVER (
+          		PARTITION BY name
+          		ORDER BY total_revenue DESC
+    		) AS rn
+    	FROM (
+    		SELECT
+    			c.name,
+        		p.category,
+        		SUM(oi.quantity * p.price) AS total_revenue
+    		FROM customers c
+    		JOIN orders o
+    			ON c.customer_id = o.customer_id
+    		JOIN order_items oi
+    			ON o.order_id = oi.order_id
+    		JOIN products p
+    			ON oi.product_id = p.product_id
+    		GROUP BY
+    			c.name,
+        		p.category
+      	) x
+      ) t
+      WHERE rn = 1;
+
+| name | category | total_revenue |
+| ---- | -------- | ------------- |
+| Anna | Shoes    | 300           |
+| Eva  | Hats     | 400           |
+| Petr | Bags     | 900           |
+
+---
+
+
