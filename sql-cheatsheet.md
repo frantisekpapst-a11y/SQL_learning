@@ -1,4 +1,4 @@
-📘 SQL Basics – Data Analyst Cheat Sheet (v6)
+📘 SQL Basics – Data Analyst Cheat Sheet (v7)
 
 🧠 1. Struktura SQL dotazu
 SELECT co_chci_videt
@@ -26,6 +26,7 @@ ORDER BY
 , → odděluje sloupce
 ; → ukončuje dotaz
 mezery → jen čitelnost
+
 📊 4. SELECT
 SELECT *
 FROM orders;
@@ -38,8 +39,8 @@ WHERE amount > 400
 👉 filtruje řádky před agregací
 
 🔢 6. Agregace
-COUNT(*)
-COUNT(sloupec)
+COUNT(*)        -- všechny řádky
+COUNT(sloupec)  -- bez NULL
 SUM(amount)
 AVG(amount)
 MAX(amount)
@@ -63,25 +64,25 @@ filtr řádků	filtr skupin
 před GROUP BY	po GROUP BY
 
 🔗 10. JOIN
-INNER JOIN
 JOIN customers c
-ON o.customer_id = c.customer_id
+    ON o.customer_id = c.customer_id
 
 👉 jen shody
 
-LEFT JOIN
+⬅️ LEFT JOIN
 LEFT JOIN orders o
-ON c.customer_id = o.customer_id
+    ON c.customer_id = o.customer_id
 
-👉 vše zleva + shody zprava + NULL
+👉 vše zleva + shody + NULL
 
 🧠 11. LEFT JOIN – WHERE vs ON
 
-👉 filtr v WHERE může zrušit LEFT JOIN
+❌ špatně:
 
--- ❌
 WHERE o.amount > 400
--- ✅
+
+✅ správně:
+
 ON c.customer_id = o.customer_id
 AND o.amount > 400
 
@@ -98,19 +99,14 @@ GROUP BY	⚠️
 HAVING	⚠️
 ORDER BY	✅
 
-👉 alias vzniká až v SELECT
-
 🧠 14. Proč nejde alias ve WHERE
 SELECT ..., ROW_NUMBER() AS rn
 FROM ...
-WHERE rn = 1  -- ❌
+WHERE rn = 1 -- ❌
 
-👉 protože:
+👉 WHERE běží dřív → rn ještě neexistuje
 
-WHERE běží dřív než SELECT
-rn ještě neexistuje
-
-🧠 15. Subquery (důležité!)
+🧠 15. Subquery
 SELECT *
 FROM (
     SELECT ..., ROW_NUMBER() AS rn
@@ -118,73 +114,100 @@ FROM (
 ) t
 WHERE rn = 1;
 
-👉 vytvoříš mezivýsledek a pak filtruješ
+👉 mezivýsledek → pak filtr
 
 📦 16. Výpočty
 SUM(o.quantity * p.price)
 
-👉 nejdřív řádek → pak agregace
+👉 řádek → pak agregace
 
 🧠 17. COALESCE
 COALESCE(SUM(amount), 0)
 
 👉 NULL → 0
 
-🔥 18. TOP per group (MAX + JOIN)
-WITH t AS (
-    SELECT customer, category, SUM(revenue) AS total
-    FROM sales
-    GROUP BY customer, category
-)
-SELECT *
-FROM t
-JOIN (
-    SELECT customer, MAX(total) AS max_total
-    FROM t
-    GROUP BY customer
-) m
-ON t.customer = m.customer
-AND t.total = m.max_total;
+🔥 18. CASE WHEN (NOVÉ)
+CASE
+    WHEN condition THEN 'value'
+    WHEN condition THEN 'value'
+    ELSE 'value'
+END
+
+👉 vytváří nový sloupec ve výsledku
+
+🎯 Použití
+CASE
+    WHEN total_revenue > 1000 THEN 'VIP'
+    WHEN total_revenue > 500 THEN 'medium'
+    ELSE 'low'
+END AS segment
+⚠️ Důležité
+
+👉 podmínky jdou shora dolů
+👉 nejpřísnější vždy nahoře
+
+🧠 19. GROUP BY pravidlo (NOVÉ)
+
+Každý sloupec v SELECTu musí být:
+
+buď v GROUP BY
+nebo agregace
+❌ špatně
+SELECT customer, category, SUM(revenue)
+GROUP BY customer;
+✅ správně
+GROUP BY customer, category
+
+🧠 20. JOIN logika (NOVÉ)
+
+👉 vztahy:
+
+customers → orders → order_items → products
+
+👉 proč:
+
+zákazník → objednávky
+objednávka → položky
+položka → produkt
+
+👉 nelze:
+
+customers → products ❌
+
+protože chybí vazba
+
+🔥 21. TOP per group (MAX + JOIN)
 
 👉 vrací všechny top (i při shodě)
 
-🚀 19. TOP per group (ROW_NUMBER)
-SELECT *
-FROM (
-    SELECT *,
-        ROW_NUMBER() OVER (
-            PARTITION BY customer
-            ORDER BY revenue DESC
-        ) AS rn
-    FROM sales
-) t
-WHERE rn = 1;
-
-👉 vrací jen 1 řádek na skupinu
-
-🧠 20. ROW_NUMBER vs RANK
-funkce	chování
-ROW_NUMBER	vždy 1,2,3 → rozbije remízu
-RANK	stejné hodnoty = stejné pořadí
-
-🔥 21. RANK (vrátí remízy)
-RANK() OVER (
+🚀 22. TOP per group (ROW_NUMBER)
+ROW_NUMBER() OVER (
     PARTITION BY customer
     ORDER BY revenue DESC
 )
 
-👉 WHERE rank = 1 → více řádků při shodě
+👉 WHERE rn = 1
 
-⚡ 22. Mentální model
+🧠 23. ROW_NUMBER vs RANK
+funkce	chování
+ROW_NUMBER	rozbije remízu
+RANK	zachová remízu
+
+🔥 24. LIMIT vs ROW_NUMBER (NOVÉ)
+situace	použij
+jednoduchý top 1	LIMIT
+komplexní logika	ROW_NUMBER
+
+⚡ 25. Mentální model
 vezmi data (FROM)
 spoj (JOIN)
 filtruj (WHERE)
 seskup (GROUP BY)
 počítej
 filtruj skupiny (HAVING)
-seřaď
+seřaď (ORDER BY)
 
-🚀 23. Rychlé rozhodování
+🚀 26. Rychlé rozhodování
 otázka	řešení
 kolik	COUNT
 kolik celkem	SUM
@@ -194,8 +217,9 @@ kdo nemá	LEFT JOIN + IS NULL
 filtr před	WHERE
 filtr po	HAVING
 NULL → 0	COALESCE
-top per group	ROW_NUMBER / MAX + JOIN
+top per group	ROW_NUMBER / RANK
 
-🧠 24. SQL mindset
+🧠 27. SQL mindset
 
-👉 SQL = popis výsledku, ne postup
+👉 SQL ≠ programování
+👉 SQL = popis výsledku
