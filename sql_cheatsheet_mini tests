@@ -271,6 +271,58 @@ SELECT
     END AS segment
 FROM sales;
 
+**Schema (MySQL v5.7)**
 
+    CREATE TABLE customers (
+        customer_id INT,
+        name VARCHAR(50)
+    );
+    
+    INSERT INTO customers VALUES
+    (1, 'Anna'),
+    (2, 'Petr'),
+    (3, 'Eva'),
+    (4, 'Jan');
+    
+    CREATE TABLE orders (
+        order_id INT,
+        customer_id INT,
+        amount INT
+    );
+    
+    INSERT INTO orders VALUES
+    (1, 1, 500),
+    (2, 1, 300),
+    (3, 2, 700),
+    (4, 2, 200),
+    (5, 2, 100);
+
+---
+
+**Query #1**
+
+    SELECT
+    	c.customer_id,
+        c.name,
+        COALESCE(SUM(o.amount), 0) AS total_revenue,
+        CASE
+        	WHEN COALESCE(SUM(o.amount), 0) > 1000 THEN 'top'
+            WHEN COALESCE(SUM(o.amount), 0) > 500 THEN 'medium'
+            ELSE 'low'
+     	END AS segment
+    FROM customers c
+    LEFT JOIN orders o
+    	ON c.customer_id = o.customer_id
+    GROUP BY
+    	c.customer_id,
+        c.name
+    ORDER BY total_revenue DESC;
+
+| customer_id | name | total_revenue | segment |
+| ----------- | ---- | ------------- | ------- |
+| 2           | Petr | 1000          | medium  |
+| 1           | Anna | 800           | medium  |
+| 3           | Eva  | 0             | low     |
+| 4           | Jan  | 0             | low     |
 
 
