@@ -210,5 +210,56 @@
 
 ---
 
+SELECT
+    customer,
+    category,
+    revenue
+FROM (
+    SELECT
+        customer,
+        category,
+        revenue,
+        ROW_NUMBER() OVER (
+            PARTITION BY customer
+            ORDER BY revenue DESC
+        ) AS rn
+    FROM sales
+) x
+WHERE rn = 1;
+
+SELECT
+    customer,
+    category,
+    revenue
+FROM (
+    SELECT
+        customer,
+        category,
+        revenue,
+        ROW_NUMBER() OVER (
+            PARTITION BY customer
+            ORDER BY revenue DESC
+        ) AS rn
+    FROM sales
+) x
+WHERE rn =< 2;
+
+SELECT
+    customer,
+    category,
+    revenue
+FROM (
+    SELECT
+        customer,
+        category,
+        revenue,
+        RANK() OVER (
+            PARTITION BY customer
+            ORDER BY revenue DESC
+        ) AS rnk
+    FROM sales
+) x
+WHERE rnk = 1;
+
 
 
