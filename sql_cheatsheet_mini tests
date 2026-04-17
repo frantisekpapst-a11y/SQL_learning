@@ -102,4 +102,113 @@
 
 ---
 
+**Schema (MySQL v5.7)**
+
+    CREATE TABLE customers (
+        customer_id INT,
+        name VARCHAR(50)
+    );
+    
+    INSERT INTO customers VALUES
+    (1, 'Anna'),
+    (2, 'Petr'),
+    (3, 'Eva'),
+    (4, 'Jan');
+    CREATE TABLE orders (
+        order_id INT,
+        customer_id INT,
+        amount INT
+    );
+    
+    INSERT INTO orders VALUES
+    (1, 1, 500),
+    (2, 1, 300),
+    (3, 2, 700),
+    (4, 2, 200),
+    (5, 2, 100);
+
+---
+
+**Query #1**
+
+    SELECT
+    	c.name,
+        c.customer_id,
+        o.order_id
+    FROM customers c
+    JOIN orders o
+    	ON c.customer_id = o.customer_id
+    ORDER BY c.name ASC;
+
+| name | customer_id | order_id |
+| ---- | ----------- | -------- |
+| Anna | 1           | 1        |
+| Anna | 1           | 2        |
+| Petr | 2           | 4        |
+| Petr | 2           | 5        |
+| Petr | 2           | 3        |
+
+---
+**Query #2**
+
+    SELECT
+        c.name,
+        c.customer_id
+    FROM customers c
+    LEFT JOIN orders o
+        ON c.customer_id = o.customer_id
+    WHERE o.order_id IS NULL;
+
+| name | customer_id |
+| ---- | ----------- |
+| Eva  | 3           |
+| Jan  | 4           |
+
+---
+**Query #3**
+
+    SELECT
+    	c.name,
+        c.customer_id,
+        COUNT(o.order_id) AS total_orders
+    FROM customers c
+    LEFT JOIN orders o
+    	ON c.customer_id = o.customer_id
+    GROUP BY
+    	c.name,
+        c.customer_id
+    HAVING COUNT(o.order_id) = 0
+    ORDER BY c.name ASC;
+
+| name | customer_id | total_orders |
+| ---- | ----------- | ------------ |
+| Eva  | 3           | 0            |
+| Jan  | 4           | 0            |
+
+---
+**Query #4**
+
+    SELECT
+    	c.name,
+        c.customer_id,
+        COALESCE(SUM(o.amount), 0) AS total_revenue
+    FROM customers c
+    LEFT JOIN orders o
+    	ON c.customer_id = o.customer_id
+    GROUP BY
+    	c.name,
+        c.customer_id
+    ORDER BY
+    	total_revenue DESC;
+
+| name | customer_id | total_revenue |
+| ---- | ----------- | ------------- |
+| Petr | 2           | 1000          |
+| Anna | 1           | 800           |
+| Eva  | 3           | 0             |
+| Jan  | 4           | 0             |
+
+---
+
+
 
