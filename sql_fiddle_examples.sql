@@ -641,5 +641,102 @@ HAVING total_orders >= 2;
 
 ---
 
+**Schema (MySQL v8)**
+
+    CREATE TABLE sales (
+        customer VARCHAR(50),
+        date DATE,
+        revenue INT
+    );
+    
+    INSERT INTO sales VALUES
+    ('A', '2024-01-01', 100),
+    ('A', '2024-02-01', 200),
+    ('A', '2024-03-01', 150),
+    ('B', '2024-01-01', 300),
+    ('B', '2024-02-01', 100);
+
+---
+
+**Query #1**
+
+    SELECT
+    	customer,
+        date,
+        revenue,
+        LAG(revenue) OVER (
+          	PARTITION BY customer
+          	ORDER BY date
+     	) AS prev_revenue
+    FROM sales;
+
+| customer | date       | revenue | prev_revenue |
+| -------- | ---------- | ------- | ------------ |
+| A        | 2024-01-01 | 100     |              |
+| A        | 2024-02-01 | 200     | 100          |
+| A        | 2024-03-01 | 150     | 200          |
+| B        | 2024-01-01 | 300     |              |
+| B        | 2024-02-01 | 100     | 300          |
+
+---
+**Query #2**
+
+    SELECT
+    	customer,
+        date,
+        revenue,
+        LAG(revenue) OVER (
+          	PARTITION BY customer
+          	ORDER BY date
+     	) AS prev_revenue
+    FROM sales;
+
+| customer | date       | revenue | prev_revenue |
+| -------- | ---------- | ------- | ------------ |
+| A        | 2024-01-01 | 100     |              |
+| A        | 2024-02-01 | 200     | 100          |
+| A        | 2024-03-01 | 150     | 200          |
+| B        | 2024-01-01 | 300     |              |
+| B        | 2024-02-01 | 100     | 300          |
+
+---
+**Query #3**
+
+    SELECT
+    	customer,
+        date,
+        revenue,
+       	CASE
+        	WHEN LAG(revenue) OVER (
+            	PARTITION BY customer
+            	ORDER BY date
+        	) IS NULL THEN NULL
+        	ELSE CONCAT(
+            	ROUND(
+                	(revenue - LAG(revenue) OVER (
+                    	PARTITION BY customer
+                    	ORDER BY date
+                	)) * 100.0
+                	/
+                	LAG(revenue) OVER (
+                    	PARTITION BY customer
+                    	ORDER BY date
+                	),
+                	2
+            	),
+            	'%'
+        	)
+    	END AS pct_change
+    FROM sales;
+
+| customer | date       | revenue | pct_change |
+| -------- | ---------- | ------- | ---------- |
+| A        | 2024-01-01 | 100     |            |
+| A        | 2024-02-01 | 200     | 100.00%    |
+| A        | 2024-03-01 | 150     | -25.00%    |
+| B        | 2024-01-01 | 300     |            |
+| B        | 2024-02-01 | 100     | -66.67%    |
+
+---
 
 
