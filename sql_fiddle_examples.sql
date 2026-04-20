@@ -268,8 +268,6 @@ HAVING total_orders >= 2;
 
 ---
 
-**Query #1**
-
     SELECT
     	customer,
         category,
@@ -294,7 +292,6 @@ HAVING total_orders >= 2;
 | C        | Bags     | 400     |
 
 ---
-**Query #2**
 
     SELECT
     	customer,
@@ -371,8 +368,6 @@ HAVING total_orders >= 2;
     (3, 'Bags', 300);
 
 ---
-
-**Query #1**
 
     SELECT
     	name,
@@ -464,8 +459,6 @@ HAVING total_orders >= 2;
 
 ---
 
-**Query #1**
-
     SELECT
         c.customer_id,
         c.name,
@@ -514,8 +507,6 @@ HAVING total_orders >= 2;
 
 ---
 
-**Query #1**
-
     SELECT
     	customer,
         category,
@@ -536,8 +527,6 @@ HAVING total_orders >= 2;
 | C        | Shoes    | 400     | 800                    |
 
 ---
-
-**Query #1**
 
     SELECT
     	customer,
@@ -587,7 +576,53 @@ HAVING total_orders >= 2;
 
 ---
 
-**Query #1**
+    SELECT
+    	customer,
+        category,
+        revenue,
+        SUM(revenue) OVER (
+          	PARTITION BY customer
+      	) AS total_revenue_customer,
+        CONCAT(
+        	ROUND(
+             	revenue * 100.0 / SUM(revenue) OVER (
+          			),
+          			2
+      		),
+          	'%'
+      	) AS share_percent
+    FROM sales;
+
+| customer | category | revenue | total_revenue_customer | share_percent |
+| -------- | -------- | ------- | ---------------------- | ------------- |
+| A        | Shoes    | 100     | 450                    | 6.25%         |
+| A        | Hats     | 200     | 450                    | 12.50%        |
+| A        | Bags     | 150     | 450                    | 9.38%         |
+| B        | Shoes    | 300     | 350                    | 18.75%        |
+| B        | Hats     | 50      | 350                    | 3.13%         |
+| C        | Bags     | 400     | 800                    | 25.00%        |
+| C        | Shoes    | 400     | 800                    | 25.00%        |
+
+---
+
+**Schema (MySQL v8)**
+
+    CREATE TABLE sales (
+        customer VARCHAR(50),
+        category VARCHAR(50),
+        revenue INT
+    );
+    
+    INSERT INTO sales VALUES
+    ('A', 'Shoes', 100),
+    ('A', 'Hats', 200),
+    ('A', 'Bags', 150),
+    ('B', 'Shoes', 300),
+    ('B', 'Hats', 50),
+    ('C', 'Bags', 400),
+    ('C', 'Shoes', 400);
+
+---
 
     SELECT
     	customer,
@@ -637,8 +672,6 @@ HAVING total_orders >= 2;
 
 ---
 
-**Query #1**
-
     SELECT
     	customer,
         category,
@@ -671,51 +704,38 @@ HAVING total_orders >= 2;
 **Schema (MySQL v8)**
 
     CREATE TABLE sales (
+        id INT,
         customer VARCHAR(50),
-        category VARCHAR(50),
         revenue INT
     );
     
     INSERT INTO sales VALUES
-    ('A', 'Shoes', 100),
-    ('A', 'Hats', 200),
-    ('A', 'Bags', 150),
-    ('B', 'Shoes', 300),
-    ('B', 'Hats', 50),
-    ('C', 'Bags', 400),
-    ('C', 'Shoes', 400);
+    (1, 'A', 100),
+    (2, 'A', 200),
+    (3, 'A', 150),
+    (4, 'B', 300),
+    (5, 'B', 50);
 
 ---
-
-**Query #1**
 
     SELECT
     	customer,
-        category,
         revenue,
         SUM(revenue) OVER (
-          	PARTITION BY customer
-      	) AS total_revenue_customer,
-        CONCAT(
-        	ROUND(
-             	revenue * 100.0 / SUM(revenue) OVER (
-          			),
-          			2
-      		),
-          	'%'
-      	) AS share_percent
+          PARTITION BY customer
+          ORDER BY id
+          ) AS running_total
     FROM sales;
 
-| customer | category | revenue | total_revenue_customer | share_percent |
-| -------- | -------- | ------- | ---------------------- | ------------- |
-| A        | Shoes    | 100     | 450                    | 6.25%         |
-| A        | Hats     | 200     | 450                    | 12.50%        |
-| A        | Bags     | 150     | 450                    | 9.38%         |
-| B        | Shoes    | 300     | 350                    | 18.75%        |
-| B        | Hats     | 50      | 350                    | 3.13%         |
-| C        | Bags     | 400     | 800                    | 25.00%        |
-| C        | Shoes    | 400     | 800                    | 25.00%        |
+| customer | revenue | running_total |
+| -------- | ------- | ------------- |
+| A        | 100     | 100           |
+| A        | 200     | 300           |
+| A        | 150     | 450           |
+| B        | 300     | 300           |
+| B        | 50      | 350           |
 
 ---
+
 
 
