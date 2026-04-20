@@ -495,5 +495,227 @@ HAVING total_orders >= 2;
 
 ---
 
+**Schema (MySQL v8)**
+
+    CREATE TABLE sales (
+        customer VARCHAR(50),
+        category VARCHAR(50),
+        revenue INT
+    );
+    
+    INSERT INTO sales VALUES
+    ('A', 'Shoes', 100),
+    ('A', 'Hats', 200),
+    ('A', 'Bags', 150),
+    ('B', 'Shoes', 300),
+    ('B', 'Hats', 50),
+    ('C', 'Bags', 400),
+    ('C', 'Shoes', 400);
+
+---
+
+**Query #1**
+
+    SELECT
+    	customer,
+        category,
+        revenue,
+        SUM(revenue) OVER (
+          	PARTITION BY customer
+      	) AS total_revenue_customer
+    FROM sales;
+
+| customer | category | revenue | total_revenue_customer |
+| -------- | -------- | ------- | ---------------------- |
+| A        | Shoes    | 100     | 450                    |
+| A        | Hats     | 200     | 450                    |
+| A        | Bags     | 150     | 450                    |
+| B        | Shoes    | 300     | 350                    |
+| B        | Hats     | 50      | 350                    |
+| C        | Bags     | 400     | 800                    |
+| C        | Shoes    | 400     | 800                    |
+
+---
+
+**Query #1**
+
+    SELECT
+    	customer,
+        category,
+        revenue,
+        SUM(revenue) OVER (
+          	PARTITION BY customer
+      	) AS total_revenue_customer,
+        CONCAT(
+        	ROUND(
+             	revenue * 100.0 / SUM(revenue) OVER (
+          			PARTITION BY customer),
+          			2
+      		),
+          	'%'
+      	) AS share_percent
+    FROM sales;
+
+| customer | category | revenue | total_revenue_customer | share_percent |
+| -------- | -------- | ------- | ---------------------- | ------------- |
+| A        | Shoes    | 100     | 450                    | 22.22%        |
+| A        | Hats     | 200     | 450                    | 44.44%        |
+| A        | Bags     | 150     | 450                    | 33.33%        |
+| B        | Shoes    | 300     | 350                    | 85.71%        |
+| B        | Hats     | 50      | 350                    | 14.29%        |
+| C        | Bags     | 400     | 800                    | 50.00%        |
+| C        | Shoes    | 400     | 800                    | 50.00%        |
+
+---
+
+**Schema (MySQL v8)**
+
+    CREATE TABLE sales (
+        customer VARCHAR(50),
+        category VARCHAR(50),
+        revenue INT
+    );
+    
+    INSERT INTO sales VALUES
+    ('A', 'Shoes', 100),
+    ('A', 'Hats', 200),
+    ('A', 'Bags', 150),
+    ('B', 'Shoes', 300),
+    ('B', 'Hats', 50),
+    ('C', 'Bags', 400),
+    ('C', 'Shoes', 400);
+
+---
+
+**Query #1**
+
+    SELECT
+    	customer,
+        category,
+        revenue,
+        SUM(revenue) OVER (
+          	PARTITION BY customer
+      	) AS total_revenue_customer,
+        CONCAT(
+        	ROUND(
+             	revenue * 100.0 / SUM(revenue) OVER (
+          			),
+          			2
+      		),
+          	'%'
+      	) AS share_percent
+    FROM sales;
+
+| customer | category | revenue | total_revenue_customer | share_percent |
+| -------- | -------- | ------- | ---------------------- | ------------- |
+| A        | Shoes    | 100     | 450                    | 6.25%         |
+| A        | Hats     | 200     | 450                    | 12.50%        |
+| A        | Bags     | 150     | 450                    | 9.38%         |
+| B        | Shoes    | 300     | 350                    | 18.75%        |
+| B        | Hats     | 50      | 350                    | 3.13%         |
+| C        | Bags     | 400     | 800                    | 25.00%        |
+| C        | Shoes    | 400     | 800                    | 25.00%        |
+
+---
+
+**Schema (MySQL v8)**
+
+    CREATE TABLE sales (
+        customer VARCHAR(50),
+        category VARCHAR(50),
+        revenue INT
+    );
+    
+    INSERT INTO sales VALUES
+    ('A', 'Shoes', 100),
+    ('A', 'Hats', 200),
+    ('A', 'Bags', 150),
+    ('B', 'Shoes', 300),
+    ('B', 'Hats', 50),
+    ('C', 'Bags', 400),
+    ('C', 'Shoes', 400);
+
+---
+
+**Query #1**
+
+    SELECT
+    	customer,
+        category,
+        revenue,
+        SUM(revenue) OVER (
+          	PARTITION BY customer
+      	) AS total_revenue_customer,
+        CONCAT(
+        	ROUND(
+             	revenue * 100.0 / SUM(revenue) OVER (
+          			),
+          			2
+      		),
+          	'%'
+      	) AS share_percent
+    FROM sales;
+
+| customer | category | revenue | total_revenue_customer | share_percent |
+| -------- | -------- | ------- | ---------------------- | ------------- |
+| A        | Shoes    | 100     | 450                    | 6.25%         |
+| A        | Hats     | 200     | 450                    | 12.50%        |
+| A        | Bags     | 150     | 450                    | 9.38%         |
+| B        | Shoes    | 300     | 350                    | 18.75%        |
+| B        | Hats     | 50      | 350                    | 3.13%         |
+| C        | Bags     | 400     | 800                    | 25.00%        |
+| C        | Shoes    | 400     | 800                    | 25.00%        |
+
+---
+
+**Schema (MySQL v8)**
+
+    CREATE TABLE sales (
+        customer VARCHAR(50),
+        category VARCHAR(50),
+        revenue INT
+    );
+    
+    INSERT INTO sales VALUES
+    ('A', 'Shoes', 100),
+    ('A', 'Hats', 200),
+    ('A', 'Bags', 150),
+    ('B', 'Shoes', 300),
+    ('B', 'Hats', 50),
+    ('C', 'Bags', 400),
+    ('C', 'Shoes', 400);
+
+---
+
+**Query #1**
+
+    SELECT
+    	customer,
+        category,
+        revenue,
+        SUM(revenue) OVER (
+          	PARTITION BY customer
+      	) AS total_revenue_customer,
+        CONCAT(
+        	ROUND(
+             	revenue * 100.0 / SUM(revenue) OVER (
+          			),
+          			2
+      		),
+          	'%'
+      	) AS share_percent
+    FROM sales;
+
+| customer | category | revenue | total_revenue_customer | share_percent |
+| -------- | -------- | ------- | ---------------------- | ------------- |
+| A        | Shoes    | 100     | 450                    | 6.25%         |
+| A        | Hats     | 200     | 450                    | 12.50%        |
+| A        | Bags     | 150     | 450                    | 9.38%         |
+| B        | Shoes    | 300     | 350                    | 18.75%        |
+| B        | Hats     | 50      | 350                    | 3.13%         |
+| C        | Bags     | 400     | 800                    | 25.00%        |
+| C        | Shoes    | 400     | 800                    | 25.00%        |
+
+---
 
 
