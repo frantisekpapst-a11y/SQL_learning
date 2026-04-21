@@ -1,0 +1,99 @@
+-- ============================================================
+-- CASE STUDY 3
+-- Topic: Customer Revenue Trend Analysis (MoM change)
+-- ============================================================
+
+-- Goal:
+-- For each customer:
+-- 1. Revenue per period
+-- 2. Previous revenue
+-- 3. Absolute change
+-- 4. Percentage change
+-- 5. Status (new / growth / decline)
+
+-- Skills practiced:
+-- - Window functions (LAG)
+-- - PARTITION BY + ORDER BY
+-- - Calculations in SQL
+-- - CASE WHEN (business logic)
+-- - Subqueries (clean structure)
+
+CREATE TABLE sales (
+    customer VARCHAR(50),
+    date DATE,
+    revenue INT
+);
+
+INSERT INTO sales VALUES
+('A', '2024-01-01', 100),
+('A', '2024-02-01', 200),
+('A', '2024-03-01', 150),
+
+('B', '2024-01-01', 300),
+('B', '2024-02-01', 100),
+('B', '2024-03-01', 200),
+
+('C', '2024-02-01', 500);
+
+**Schema (MySQL v8)**
+
+    CREATE TABLE sales (
+        customer VARCHAR(50),
+        date DATE,
+        revenue INT
+    );
+    
+    INSERT INTO sales VALUES
+    ('A', '2024-01-01', 100),
+    ('A', '2024-02-01', 200),
+    ('A', '2024-03-01', 150),
+    
+    ('B', '2024-01-01', 300),
+    ('B', '2024-02-01', 100),
+    ('B', '2024-03-01', 200),
+    
+    ('C', '2024-02-01', 500);
+
+---
+
+**Query #1**
+
+    SELECT
+        customer,
+        date,
+        revenue,
+        prev_revenue,
+        revenue - prev_revenue AS revenue_change,
+        ROUND((revenue - prev_revenue) * 100.0 / prev_revenue, 2) AS pct_change,
+        CASE
+            WHEN prev_revenue IS NULL THEN 'new'
+            WHEN revenue > prev_revenue THEN 'growth'
+            ELSE 'decline'
+        END AS status
+    FROM (
+        SELECT
+            customer,
+            date,
+            revenue,
+            LAG(revenue) OVER (
+                PARTITION BY customer
+                ORDER BY date
+            ) AS prev_revenue
+        FROM sales
+    ) t;
+
+| customer | date       | revenue | prev_revenue | revenue_change | pct_change | status  |
+| -------- | ---------- | ------- | ------------ | -------------- | ---------- | ------- |
+| A        | 2024-01-01 | 100     |              |                |            | new     |
+| A        | 2024-02-01 | 200     | 100          | 100            | 100.0      | growth  |
+| A        | 2024-03-01 | 150     | 200          | -50            | -25.0      | decline |
+| B        | 2024-01-01 | 300     |              |                |            | new     |
+| B        | 2024-02-01 | 100     | 300          | -200           | -66.67     | decline |
+| B        | 2024-03-01 | 200     | 100          | 100            | 100.0      | growth  |
+| C        | 2024-02-01 | 500     |              |                |            | new     |
+
+
+-- Example insights:
+-- - Customer A shows decline in latest period
+-- - Customer B recovered after drop
+-- - Customer C is a new customer (no history)
