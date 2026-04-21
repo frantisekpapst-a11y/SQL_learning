@@ -14,6 +14,7 @@ Tento repozitář dokumentuje moji cestu učení SQL – od úplných základů 
 - `case_study_1.sql` → základní customer analysis
 - `case_study_2.sql` → product & customer analysis
 - `case_study_3.sql` → top category per customer + customer segmentation
+- `case_study_4.sql` → customer revenue trends (LAG, % change, segmentation)
 
 ---
 
