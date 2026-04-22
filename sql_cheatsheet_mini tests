@@ -482,4 +482,284 @@ FROM sales;
 -- END
 -- ============================================================
 
+-- ============================================================
+-- MINI TEST #2
+-- Topic: JOINs & Filtering Logic
+-- ============================================================
+
+-- ============================================================
+-- 1. LEFT JOIN vs INNER JOIN
+-- ============================================================
+
+-- What is the difference?
+
+-- INNER JOIN
+-- vs
+-- LEFT JOIN
+
+-- Answer:
+-- INNER JOIN returns only matching rows.
+-- LEFT JOIN returns all rows from the left table + matches (NULL if no match).
+
+
+-- ============================================================
+-- 2. LEFT JOIN + WHERE (TRICKY)
+-- ============================================================
+
+-- What does this do?
+
+-- SELECT *
+-- FROM customers c
+-- LEFT JOIN orders o
+--     ON c.customer_id = o.customer_id
+-- WHERE o.amount > 100;
+
+-- Answer:
+-- Behaves like INNER JOIN (filters out NULLs).
+
+
+-- ============================================================
+-- 3. CORRECT FILTERING
+-- ============================================================
+
+-- How to keep all customers but only orders > 100?
+
+-- Answer:
+
+-- LEFT JOIN orders o
+--     ON c.customer_id = o.customer_id
+--    AND o.amount > 100
+
+
+-- ============================================================
+-- 4. FIND MISSING DATA
+-- ============================================================
+
+-- How to find customers with NO orders?
+
+-- Answer:
+
+-- LEFT JOIN orders o
+--     ON c.customer_id = o.customer_id
+-- WHERE o.order_id IS NULL
+
+
+-- ============================================================
+-- 5. COUNT + LEFT JOIN
+-- ============================================================
+
+-- Difference:
+
+-- COUNT(*) vs COUNT(o.order_id)
+
+-- Answer:
+-- COUNT(*) counts all rows.
+-- COUNT(column) counts only non-NULL values.
+
+
+-- ============================================================
+-- 6. JOIN DIRECTION
+-- ============================================================
+
+-- You want ALL orders + customers if exist.
+
+-- What do you write?
+
+-- Answer:
+
+-- FROM orders o
+-- LEFT JOIN customers c
+--     ON c.customer_id = o.customer_id
+
+
+-- ============================================================
+-- 7. WHERE IS NULL
+-- ============================================================
+
+-- What does this return?
+
+-- WHERE o.order_id IS NULL
+
+-- Answer:
+-- Rows where no match was found (no related record).
+
+
+-- ============================================================
+-- 8. COMMON MISTAKE
+-- ============================================================
+
+-- Why is this wrong?
+
+-- LEFT JOIN orders o
+--     ON c.customer_id = o.customer_id
+-- WHERE o.amount > 100
+
+-- Answer:
+-- WHERE removes NULLs → breaks LEFT JOIN logic.
+
+
+-- ============================================================
+-- 9. RIGHT JOIN
+-- ============================================================
+
+-- Why is RIGHT JOIN rarely used?
+
+-- Answer:
+-- It can be replaced by LEFT JOIN by switching table order.
+
+
+-- ============================================================
+-- 10. BONUS
+-- ============================================================
+
+-- How to get customers WITH at least 1 order?
+
+-- Answer:
+
+-- INNER JOIN orders o
+--     ON c.customer_id = o.customer_id
+
+-- OR
+
+-- LEFT JOIN + WHERE NOT NULL
+-- WHERE o.order_id IS NOT NULL
+
+-- ============================================================
+-- END
+-- ============================================================
+
+-- ============================================================
+-- MINI TEST #3
+-- Topic: Window Functions (Advanced)
+-- ============================================================
+
+-- ============================================================
+-- 1. PARTITION BY
+-- ============================================================
+
+-- What does PARTITION BY do?
+
+-- Answer:
+-- Splits data into groups for window calculations.
+
+
+-- ============================================================
+-- 2. ORDER BY in OVER()
+-- ============================================================
+
+-- What is the purpose?
+
+-- Answer:
+-- Defines calculation order (e.g. running total, LAG).
+
+
+-- ============================================================
+-- 3. RUNNING TOTAL
+-- ============================================================
+
+-- What does this do?
+
+-- SUM(revenue) OVER (
+--     PARTITION BY customer
+--     ORDER BY date
+-- )
+
+-- Answer:
+-- Running total per customer over time.
+
+
+-- ============================================================
+-- 4. SHARE OF TOTAL
+-- ============================================================
+
+-- What does this calculate?
+
+-- revenue * 100.0 / SUM(revenue) OVER ()
+
+-- Answer:
+-- Share (%) of each row relative to total.
+
+
+-- ============================================================
+-- 5. SHARE WITHIN GROUP
+-- ============================================================
+
+-- What does this do?
+
+-- revenue * 100.0 / SUM(revenue) OVER (PARTITION BY customer)
+
+-- Answer:
+-- Share (%) within each customer.
+
+
+-- ============================================================
+-- 6. MAX DIFFERENCE
+-- ============================================================
+
+-- What does this return?
+
+-- MAX(revenue) OVER (PARTITION BY customer) - revenue
+
+-- Answer:
+-- Difference from max value within customer.
+
+
+-- ============================================================
+-- 7. LAG
+-- ============================================================
+
+-- What does LAG do?
+
+-- Answer:
+-- Returns previous row value.
+
+
+-- ============================================================
+-- 8. LEAD
+-- ============================================================
+
+-- What does LEAD do?
+
+-- Answer:
+-- Returns next row value.
+
+
+-- ============================================================
+-- 9. RANK vs ROW_NUMBER
+-- ============================================================
+
+-- Difference?
+
+-- Answer:
+-- RANK keeps ties.
+-- ROW_NUMBER breaks ties.
+
+
+-- ============================================================
+-- 10. TRICKY
+-- ============================================================
+
+-- Why does this NOT preserve ties?
+
+-- RANK() OVER (
+--     ORDER BY revenue DESC, customer
+-- )
+
+-- Answer:
+-- Because ORDER BY includes customer → values are no longer equal.
+
+
+-- ============================================================
+-- BONUS
+-- ============================================================
+
+-- What happens if ORDER BY is missing in LAG?
+
+-- Answer:
+-- Result is undefined (no defined order).
+
+-- ============================================================
+-- END
+-- ============================================================
+
 
