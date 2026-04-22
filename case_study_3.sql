@@ -275,3 +275,4 @@ ORDER BY seg.total_revenue_customer DESC;
 -- - top_category_revenue is also NULL because there is no matching row
 --   in the top-category subquery.
 -- =========================================================
+
