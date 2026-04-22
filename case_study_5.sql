@@ -177,3 +177,4 @@ ORDER BY customer, date;
 -- - First row per customer has no previous period, so LAG() returns NULL.
 -- - Customer C is marked as 'new' because there is no previous record.
 -- ============================================================
+
