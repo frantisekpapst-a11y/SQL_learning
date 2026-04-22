@@ -326,3 +326,160 @@ FROM sales;
 | 4           | Jan  | 0             | low     |
 
 
+-- ============================================================
+-- MINI TEST #1
+-- Topic: SQL Basics + Window Functions
+-- ============================================================
+
+-- Instructions:
+-- Answer the questions without running SQL if possible.
+-- Focus on understanding, not memorization.
+
+-- ============================================================
+-- 1. FILL IN
+-- ============================================================
+
+-- Complete the window function:
+
+-- LAG(revenue) OVER (
+--     PARTITION BY ______
+--     ORDER BY ______
+-- )
+
+-- Expected answer:
+-- PARTITION BY customer
+-- ORDER BY date
+
+
+-- ============================================================
+-- 2. UNDERSTAND OUTPUT
+-- ============================================================
+
+-- What does this return?
+
+-- SUM(revenue) OVER ()
+
+-- Answer:
+-- Total revenue across the whole table, repeated on each row.
+
+
+-- ============================================================
+-- 3. GROUP BY vs WINDOW FUNCTION
+-- ============================================================
+
+-- Explain the difference:
+
+-- GROUP BY
+-- vs
+-- SUM() OVER ()
+
+-- Answer:
+-- GROUP BY aggregates and reduces rows.
+-- SUM() OVER () keeps all rows and adds aggregated value.
+
+
+-- ============================================================
+-- 4. JOIN LOGIC
+-- ============================================================
+
+-- How do you find customers WITHOUT orders?
+
+-- Answer:
+-- LEFT JOIN + IS NULL
+
+-- Example:
+-- FROM customers c
+-- LEFT JOIN orders o
+--     ON c.customer_id = o.customer_id
+-- WHERE o.order_id IS NULL
+
+
+-- ============================================================
+-- 5. WHERE vs HAVING
+-- ============================================================
+
+-- When do you use HAVING?
+
+-- Answer:
+-- HAVING filters aggregated results (after GROUP BY).
+-- WHERE filters rows before aggregation.
+
+
+-- ============================================================
+-- 6. WINDOW FUNCTION LOGIC
+-- ============================================================
+
+-- What does this do?
+
+-- ROW_NUMBER() OVER (
+--     PARTITION BY customer
+--     ORDER BY date DESC
+-- )
+
+-- Answer:
+-- Assigns row numbers per customer, starting from the latest date.
+
+
+-- ============================================================
+-- 7. RANK vs ROW_NUMBER
+-- ============================================================
+
+-- When do you use RANK()?
+
+-- Answer:
+-- When you want to preserve ties (same values share the same rank).
+
+
+-- ============================================================
+-- 8. PERCENT CALCULATION
+-- ============================================================
+
+-- Why use 100.0 instead of 100?
+
+-- Answer:
+-- Forces decimal calculation and prevents integer division.
+
+
+-- ============================================================
+-- 9. CTE (WITH)
+-- ============================================================
+
+-- What is WITH?
+
+-- Answer:
+-- A named intermediate result used in the query (CTE).
+
+
+-- ============================================================
+-- 10. ERROR DEBUGGING
+-- ============================================================
+
+-- Why does this NOT work?
+
+-- SELECT
+--     revenue,
+--     revenue * 100.0 / SUM(revenue) OVER () AS pct
+-- FROM sales
+-- WHERE pct > 10;
+
+-- Answer:
+-- Alias 'pct' is not available in WHERE (SELECT runs later).
+
+-- Correct solution:
+
+-- WITH base AS (
+--     SELECT
+--         revenue,
+--         revenue * 100.0 / SUM(revenue) OVER () AS pct
+--     FROM sales
+-- )
+-- SELECT *
+-- FROM base
+-- WHERE pct > 10;
+
+
+-- ============================================================
+-- END
+-- ============================================================
+
+
