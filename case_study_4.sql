@@ -97,3 +97,4 @@ INSERT INTO sales VALUES
 -- - Customer A shows decline in latest period
 -- - Customer B recovered after drop
 -- - Customer C is a new customer (no history)
+
