@@ -94,3 +94,4 @@ JOIN (
    ON r.name = m.name
   AND r.total_revenue = m.max_revenue
 ORDER BY r.total_revenue DESC;
+
