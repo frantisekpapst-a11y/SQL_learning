@@ -1,215 +1,247 @@
 # 📊 SQL Learning Journey
 
-Tento repozitář dokumentuje moji cestu učení SQL – od úplných základů až po první analytické case studies.
+Tento repozitář dokumentuje moji cestu učení SQL – od úplných základů až po pokročilejší analytické case studies.
 
-🎯 **Cíl:** dostat se na úroveň junior data analytika.
-
----
-
-## 📁 Obsah repozitáře
-
-- `sql-cheatsheet.md` → přehled SQL syntaxe, logiky a základních patternů
-- `sql_fiddle_examples.sql` → menší praktické ukázky a tréninkové dotazy
-- `sql_cheatsheet_mini_tests` → krátké mini úkoly na procvičení
-- `case_study_1.sql` → základní customer analysis
-- `case_study_2.sql` → product & customer analysis
-- `case_study_3.sql` → top category per customer + customer segmentation
-- `case_study_4.sql` → customer revenue trends (LAG, % change, segmentation)
-- `case_study_5.sql` → customer revenue trends (LAG, MoM change, growth/decline status)
+🎯 Cíl: dostat se na úroveň junior data analytika a umět řešit reálné business problémy pomocí dat.
 
 ---
 
-## 🧠 Co se v repozitáři učím
+# 📁 Obsah repozitáře
 
-### SQL základy
-- `SELECT`, `WHERE`, `ORDER BY`
-- `GROUP BY`, `HAVING`
-- agregační funkce (`SUM`, `COUNT`, `AVG`, `MAX`, `MIN`)
-- rozdíl mezi `COUNT(*)` a `COUNT(sloupec)`
-
-### Práce s tabulkami
-- `INNER JOIN`
-- `LEFT JOIN`
-- rozdíl mezi filtrem v `WHERE` a v `ON`
-- práce s více tabulkami najednou
-
-### Práce s daty
-- výpočty v SQL  
-  např. `quantity * price`
-- práce s `NULL` hodnotami pomocí `COALESCE`
-- segmentace pomocí `CASE WHEN`
-
-### Analytické patterny
-- revenue per customer
-- revenue per product
-- revenue by category
-- top per group
-- `ROW_NUMBER()` a `RANK()`
-- subquery jako mezivýsledek v analýze
+- `sql-cheatsheet.md` → přehled SQL syntaxe, logiky a základních patternů  
+- `sql_fiddle_examples.sql` → menší praktické ukázky a tréninkové dotazy  
+- `sql_cheatsheet_mini_tests` → krátké mini úkoly na procvičení  
+- `case_study_1.sql` → základní customer analysis  
+- `case_study_2.sql` → product & customer analysis  
+- `case_study_3.sql` → top category per customer + segmentation  
+- `case_study_4.sql` → customer revenue trends (LAG, % change)  
+- `case_study_5.sql` → revenue change + growth/decline status  
+- `case_study_6.sql` → filtering + TOP growth customers  
+- `case_study_7.sql` → customer value analysis (revenue, segment, ranking)
 
 ---
 
-## 📊 Používané datasety
+# 🧠 Co se v repozitáři učím
 
-V repozitáři pracuji s jednoduchými testovacími datasety, které mi pomáhají pochopit principy datové analýzy.
+## 🔰 SQL základy
+- SELECT, WHERE, ORDER BY  
+- GROUP BY, HAVING  
+- agregační funkce (SUM, COUNT, AVG, MAX, MIN)  
+- rozdíl mezi `COUNT(*)` a `COUNT(column)`  
+
+## 🔗 Práce s tabulkami
+- INNER JOIN  
+- LEFT JOIN  
+- rozdíl mezi filtrem v `WHERE` vs `ON`  
+- práce s více tabulkami  
+
+## 📊 Práce s daty
+- výpočty v SQL (např. `quantity * price`)  
+- práce s NULL hodnotami (`COALESCE`)  
+- segmentace (`CASE WHEN`)  
+
+## 🚀 Analytické patterny
+- revenue per customer / product / category  
+- top per group  
+- subquery vs CTE  
+- kombinace více kroků v jednom dotazu  
+
+## 🔥 Window functions
+- `ROW_NUMBER()` vs `RANK()`  
+- `LAG()` (předchozí hodnota)  
+- změna a % změna v čase  
+- ranking zákazníků  
+- agregace bez ztráty řádků (`SUM() OVER`)  
+
+---
+
+# 📊 Používané datasety
+
+Používám jednoduché testovací datasety pro pochopení principů:
 
 ### Jednoduchý dataset
-
-#### `orders`
-| order_id | customer_id | amount |
-|----------|------------:|-------:|
-| 1        | 1           | 500    |
-| 2        | 2           | 300    |
-| 3        | 1           | 700    |
-
-#### `customers`
-| customer_id | name |
-|-------------|------|
-| 1           | Jan  |
-| 2           | Eva  |
-| 3           | Petr |
+- `orders`
+- `customers`
 
 ### Rozšířený dataset
+- customers  
+- orders  
+- order_items  
+- products  
 
-Pro pokročilejší case studies používám více tabulek:
-
-- `customers`
-- `orders`
-- `order_items`
-- `products`
-
-Tento model mi umožňuje řešit realističtější analytické úlohy, například:
-- revenue podle zákazníka
-- revenue podle produktu
-- revenue podle kategorie
-- top category per customer
-- customer segmentation
+👉 Tento model umožňuje řešit realističtější úlohy:
+- revenue podle zákazníka  
+- revenue podle produktu  
+- revenue podle kategorie  
+- top category per customer  
+- customer segmentation  
 
 ---
 
-## 🧪 Practice / mini úkoly
+# 🧪 Practice / mini úkoly
 
-Repozitář obsahuje i menší cvičení zaměřená na postupné budování SQL myšlení.
+Repozitář obsahuje i menší cvičení pro budování SQL myšlení.
 
-### 🟢 Základy
-1. Vypsat všechny objednávky
-2. Najít objednávky nad určitou hodnotu
-3. Spočítat počet řádků
-4. Porovnat `COUNT(*)` vs `COUNT(sloupec)`
+## 🟢 Základy
+- vypsání dat  
+- filtrování (`WHERE`)  
+- počítání (`COUNT`)  
 
-### 🟡 Agregace
-5. Kolik utratil každý zákazník
-6. Kolik má kdo objednávek
-7. Průměrná hodnota objednávky
-8. Zákazníci s více než X objednávkami
+## 🟡 Agregace
+- kolik utratil zákazník  
+- kolik má objednávek  
+- průměry  
+- HAVING  
 
-### 🟠 JOIN a práce s více tabulkami
-9. Připojit zákazníky k objednávkám
-10. Najít zákazníky bez objednávek
-11. Revenue per customer
-12. Revenue per category
+## 🟠 JOIN
+- spojování tabulek  
+- zákazníci bez objednávek  
+- revenue per customer  
 
-### 🔴 Pokročilejší patterny
-13. Top category per customer
-14. `ROW_NUMBER()` vs `RANK()`
-15. Segmentace zákazníků pomocí `CASE WHEN`
-16. Kombinace více mezivýsledků v jednom analytickém dotazu
+## 🔴 Pokročilé
+- TOP per group  
+- ROW_NUMBER vs RANK  
+- segmentace  
+- práce s mezivýsledky  
 
 ---
+
+# 📊 Case Studies
 
 ## 📊 Case Study 1 – Customer Analysis
+Základní analýza zákazníků.
 
-První case study je zaměřená na základní analýzu zákazníků.
-
-### Co řeším
-- celkovou útratu zákazníků
+**Co řeším:**
+- celkovou útratu
 - počet objednávek
-- průměrnou hodnotu objednávky
-- identifikaci aktivnějších a hodnotnějších zákazníků
+- průměr
 
-### Hlavní témata
-- `GROUP BY`
-- agregační funkce
-- `HAVING`
-- jednoduché business otázky nad daty
+**Témata:**
+- GROUP BY  
+- agregace  
+- HAVING  
 
 ---
 
 ## 📊 Case Study 2 – Product & Customer Analysis
+Analýza přes více tabulek.
 
-Druhá case study pracuje s více tabulkami a realističtější strukturou dat.
+**Co řeším:**
+- revenue per product  
+- revenue per customer  
+- revenue by category  
 
-### Co řeším
-- performance produktů
-- revenue per product
-- revenue per customer
-- revenue by category
-- top category per customer
-
-### Hlavní témata
-- více `JOIN`ů
-- výpočty typu `quantity * price`
-- agregace napříč více tabulkami
-- analytické myšlení nad business daty
+**Témata:**
+- JOINy  
+- výpočty  
+- agregace  
 
 ---
 
-## 📊 Case Study 3 – Top Category per Customer + Segmentation
+## 📊 Case Study 3 – Top Category per Customer
+Kombinace více analytických kroků.
 
-Třetí case study kombinuje více analytických kroků do jednoho problému.
+**Co řeším:**
+- top category per customer  
+- total revenue  
+- segment  
 
-### Cíl
-Pro každého zákazníka najít:
-- top kategorii podle revenue
-- revenue v této kategorii
-- celkové customer revenue
-- segment zákazníka (`top / medium / low`)
-
-### Co jsem si na tom procvičil
-- rozdíl mezi `JOIN` a `LEFT JOIN`
-- proč někdy potřebuji dva oddělené mezivýsledky
-- `ROW_NUMBER()` pro top per group
-- `CASE WHEN` pro segmentaci
-- `COALESCE` a práce s `NULL`
-- rozdíl mezi chybějícím řádkem a `NULL` hodnotou
-
-### Klíčový insight
-Top category a total customer revenue jsou dvě různé business otázky, takže je lepší je počítat odděleně a spojit až ve finálním kroku.
+**Témata:**
+- ROW_NUMBER()  
+- CASE WHEN  
+- COALESCE  
 
 ---
 
-## 🧠 Jak nad SQL přemýšlím
+## 📊 Case Study 4 – Revenue Trends
+Analýza vývoje v čase.
 
-SQL pro mě není jen syntaxe, ale způsob, jak přemýšlet nad daty.
+**Co řeším:**
+- revenue per period  
+- předchozí hodnota  
+- změna a % změna  
 
-Typický myšlenkový postup:
-
-1. **Odkud beru data** (`FROM`)
-2. **Jaké tabulky potřebuji spojit** (`JOIN`)
-3. **Co chci odfiltrovat ještě před výpočtem** (`WHERE`)
-4. **Jak data seskupím** (`GROUP BY`)
-5. **Co spočítám** (`SUM`, `COUNT`, `AVG`, ...)
-6. **Co odfiltruji až po agregaci** (`HAVING`)
-7. **Jak výsledky seřadím** (`ORDER BY`)
-
-Postupně se učím přecházet od psaní jednotlivých dotazů k řešení reálnějších analytických úloh.
+**Témata:**
+- LAG()  
+- window functions  
 
 ---
 
-## 🚀 Co dál
+## 📊 Case Study 5 – Growth vs Decline
+Rozšíření trendové analýzy.
 
-Další témata, na která chci navázat:
+**Co řeším:**
+- growth / decline status  
+- interpretace změny  
 
-- pokročilejší subquery
-- další window functions
-- komplexnější SQL case studies
-- Excel pro analytickou práci
-- Power BI a dashboarding
-- Python (`pandas`) pro data analysis
+**Témata:**
+- CASE WHEN  
+- business logika  
 
 ---
 
-## 📌 Poznámka
+## 📊 Case Study 6 – Top Growth Customers
+Filtrace a výběr TOP zákazníků.
 
-Tento repozitář je součást mého learning journey.  
-Nejde o hotový produkční projekt, ale o průběžně budovaný přehled toho, co se učím, zkouším a postupně chápu v SQL a datové analýze.
+**Co řeším:**
+- zákazníci s růstem  
+- TOP podle změny  
+
+**Témata:**
+- WHERE  
+- ROW_NUMBER / RANK  
+
+---
+
+## 📊 Case Study 7 – Customer Value Analysis
+Komplexní analýza zákaznické hodnoty.
+
+**Co řeším:**
+- total revenue zákazníka  
+- segment (top / medium / low)  
+- ranking zákazníků  
+- zákazníci bez objednávek  
+
+**Témata:**
+- LEFT JOIN  
+- GROUP BY  
+- COALESCE  
+- CASE WHEN  
+- RANK()  
+- subquery vs CTE  
+
+---
+
+# 🧠 Jak nad SQL přemýšlím
+
+SQL není jen syntaxe, ale způsob uvažování:
+
+1. Odkud beru data (FROM)  
+2. Jaké tabulky spojím (JOIN)  
+3. Co odfiltruju (WHERE)  
+4. Jak seskupím data (GROUP BY)  
+5. Co spočítám (SUM, COUNT…)  
+6. Co filtruju po agregaci (HAVING)  
+7. Jak seřadím výstup (ORDER BY)  
+
+👉 Postupně přecházím od jednoduchých dotazů k řešení reálných analytických problémů.
+
+---
+
+# 🚀 Co dál
+
+Další kroky:
+
+- pokročilejší window functions  
+- komplexnější case studies  
+- SQL + Excel  
+- Power BI (dashboardy)  
+- Python (pandas, EDA)  
+
+---
+
+# 📌 Poznámka
+
+Tento repozitář je součást mého learning journey.
+
+Nejde o produkční projekt, ale o praktický přehled toho, co se učím, testuji a postupně chápu v oblasti datové analýzy.
