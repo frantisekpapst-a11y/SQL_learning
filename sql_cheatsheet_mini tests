@@ -327,186 +327,30 @@ FROM sales;
 
 
 -- ============================================================
--- MINI TEST #1
--- Topic: SQL Basics + Window Functions
--- ============================================================
-
--- Instructions:
--- Answer the questions without running SQL if possible.
--- Focus on understanding, not memorization.
-
--- ============================================================
--- 1. FILL IN
--- ============================================================
-
--- Complete the window function:
-
--- LAG(revenue) OVER (
---     PARTITION BY ______
---     ORDER BY ______
--- )
-
--- Expected answer:
--- PARTITION BY customer
--- ORDER BY date
-
-
--- ============================================================
--- 2. UNDERSTAND OUTPUT
--- ============================================================
-
--- What does this return?
-
--- SUM(revenue) OVER ()
-
--- Answer:
--- Total revenue across the whole table, repeated on each row.
-
-
--- ============================================================
--- 3. GROUP BY vs WINDOW FUNCTION
--- ============================================================
-
--- Explain the difference:
-
--- GROUP BY
--- vs
--- SUM() OVER ()
-
--- Answer:
--- GROUP BY aggregates and reduces rows.
--- SUM() OVER () keeps all rows and adds aggregated value.
-
-
--- ============================================================
--- 4. JOIN LOGIC
--- ============================================================
-
--- How do you find customers WITHOUT orders?
-
--- Answer:
--- LEFT JOIN + IS NULL
-
--- Example:
--- FROM customers c
--- LEFT JOIN orders o
---     ON c.customer_id = o.customer_id
--- WHERE o.order_id IS NULL
-
-
--- ============================================================
--- 5. WHERE vs HAVING
--- ============================================================
-
--- When do you use HAVING?
-
--- Answer:
--- HAVING filters aggregated results (after GROUP BY).
--- WHERE filters rows before aggregation.
-
-
--- ============================================================
--- 6. WINDOW FUNCTION LOGIC
--- ============================================================
-
--- What does this do?
-
--- ROW_NUMBER() OVER (
---     PARTITION BY customer
---     ORDER BY date DESC
--- )
-
--- Answer:
--- Assigns row numbers per customer, starting from the latest date.
-
-
--- ============================================================
--- 7. RANK vs ROW_NUMBER
--- ============================================================
-
--- When do you use RANK()?
-
--- Answer:
--- When you want to preserve ties (same values share the same rank).
-
-
--- ============================================================
--- 8. PERCENT CALCULATION
--- ============================================================
-
--- Why use 100.0 instead of 100?
-
--- Answer:
--- Forces decimal calculation and prevents integer division.
-
-
--- ============================================================
--- 9. CTE (WITH)
--- ============================================================
-
--- What is WITH?
-
--- Answer:
--- A named intermediate result used in the query (CTE).
-
-
--- ============================================================
--- 10. ERROR DEBUGGING
--- ============================================================
-
--- Why does this NOT work?
-
--- SELECT
---     revenue,
---     revenue * 100.0 / SUM(revenue) OVER () AS pct
--- FROM sales
--- WHERE pct > 10;
-
--- Answer:
--- Alias 'pct' is not available in WHERE (SELECT runs later).
-
--- Correct solution:
-
--- WITH base AS (
---     SELECT
---         revenue,
---         revenue * 100.0 / SUM(revenue) OVER () AS pct
---     FROM sales
--- )
--- SELECT *
--- FROM base
--- WHERE pct > 10;
-
-
--- ============================================================
--- END
--- ============================================================
-
--- ============================================================
 -- MINI TEST #2
--- Topic: JOINs & Filtering Logic
+-- Téma: JOINy & filtrování
 -- ============================================================
 
 -- ============================================================
--- 1. LEFT JOIN vs INNER JOIN
+-- 1. INNER JOIN vs LEFT JOIN
 -- ============================================================
 
--- What is the difference?
+-- Jaký je rozdíl?
 
 -- INNER JOIN
 -- vs
 -- LEFT JOIN
 
--- Answer:
--- INNER JOIN returns only matching rows.
--- LEFT JOIN returns all rows from the left table + matches (NULL if no match).
+-- Odpověď:
+-- INNER JOIN vrací jen shodné řádky.
+-- LEFT JOIN vrací všechny řádky z levé tabulky + shody (jinak NULL).
 
 
 -- ============================================================
--- 2. LEFT JOIN + WHERE (TRICKY)
+-- 2. LEFT JOIN + WHERE (CHYTÁK)
 -- ============================================================
 
--- What does this do?
+-- Co udělá tento dotaz?
 
 -- SELECT *
 -- FROM customers c
@@ -514,17 +358,17 @@ FROM sales;
 --     ON c.customer_id = o.customer_id
 -- WHERE o.amount > 100;
 
--- Answer:
--- Behaves like INNER JOIN (filters out NULLs).
+-- Odpověď:
+-- Chová se jako INNER JOIN (NULL řádky jsou odfiltrovány).
 
 
 -- ============================================================
--- 3. CORRECT FILTERING
+-- 3. SPRÁVNÉ FILTROVÁNÍ
 -- ============================================================
 
--- How to keep all customers but only orders > 100?
+-- Jak zachovat všechny zákazníky, ale jen objednávky > 100?
 
--- Answer:
+-- Odpověď:
 
 -- LEFT JOIN orders o
 --     ON c.customer_id = o.customer_id
@@ -532,12 +376,12 @@ FROM sales;
 
 
 -- ============================================================
--- 4. FIND MISSING DATA
+-- 4. HLEDÁNÍ CHYBĚJÍCÍCH DAT
 -- ============================================================
 
--- How to find customers with NO orders?
+-- Jak najdeš zákazníky bez objednávky?
 
--- Answer:
+-- Odpověď:
 
 -- LEFT JOIN orders o
 --     ON c.customer_id = o.customer_id
@@ -545,27 +389,29 @@ FROM sales;
 
 
 -- ============================================================
--- 5. COUNT + LEFT JOIN
+-- 5. COUNT u LEFT JOIN
 -- ============================================================
 
--- Difference:
+-- Jaký je rozdíl?
 
--- COUNT(*) vs COUNT(o.order_id)
+-- COUNT(*)
+-- vs
+-- COUNT(o.order_id)
 
--- Answer:
--- COUNT(*) counts all rows.
--- COUNT(column) counts only non-NULL values.
+-- Odpověď:
+-- COUNT(*) počítá všechny řádky.
+-- COUNT(sloupec) počítá jen nenull hodnoty.
 
 
 -- ============================================================
--- 6. JOIN DIRECTION
+-- 6. SMĚR JOINU
 -- ============================================================
 
--- You want ALL orders + customers if exist.
+-- Chci všechny objednávky + zákazníky (pokud existují)
 
--- What do you write?
+-- Jak začnu FROM?
 
--- Answer:
+-- Odpověď:
 
 -- FROM orders o
 -- LEFT JOIN customers c
@@ -576,53 +422,54 @@ FROM sales;
 -- 7. WHERE IS NULL
 -- ============================================================
 
--- What does this return?
+-- Co vrátí:
 
 -- WHERE o.order_id IS NULL
 
--- Answer:
--- Rows where no match was found (no related record).
+-- Odpověď:
+-- Řádky bez odpovídajícího záznamu (nenašla se shoda).
 
 
 -- ============================================================
--- 8. COMMON MISTAKE
+-- 8. ČASTÁ CHYBA
 -- ============================================================
 
--- Why is this wrong?
+-- Proč je toto špatně?
 
 -- LEFT JOIN orders o
 --     ON c.customer_id = o.customer_id
 -- WHERE o.amount > 100
 
--- Answer:
--- WHERE removes NULLs → breaks LEFT JOIN logic.
+-- Odpověď:
+-- WHERE odstraní NULL → zničí logiku LEFT JOIN.
 
 
 -- ============================================================
 -- 9. RIGHT JOIN
 -- ============================================================
 
--- Why is RIGHT JOIN rarely used?
+-- Proč se RIGHT JOIN skoro nepoužívá?
 
--- Answer:
--- It can be replaced by LEFT JOIN by switching table order.
+-- Odpověď:
+-- Dá se nahradit LEFT JOIN otočením tabulek.
 
 
 -- ============================================================
 -- 10. BONUS
 -- ============================================================
 
--- How to get customers WITH at least 1 order?
+-- Jak najdeš zákazníky, kteří mají alespoň 1 objednávku?
 
--- Answer:
+-- Odpověď:
 
 -- INNER JOIN orders o
 --     ON c.customer_id = o.customer_id
 
--- OR
+-- nebo
 
 -- LEFT JOIN + WHERE NOT NULL
 -- WHERE o.order_id IS NOT NULL
+
 
 -- ============================================================
 -- END
@@ -630,136 +477,135 @@ FROM sales;
 
 -- ============================================================
 -- MINI TEST #3
--- Topic: Window Functions (Advanced)
+-- Téma: Window funkce (pokročilé)
 -- ============================================================
 
 -- ============================================================
 -- 1. PARTITION BY
 -- ============================================================
 
--- What does PARTITION BY do?
+-- Co dělá PARTITION BY?
 
--- Answer:
--- Splits data into groups for window calculations.
+-- Odpověď:
+-- Rozděluje data do skupin pro výpočet window funkce.
 
 
 -- ============================================================
--- 2. ORDER BY in OVER()
+-- 2. ORDER BY v OVER()
 -- ============================================================
 
--- What is the purpose?
+-- K čemu slouží?
 
--- Answer:
--- Defines calculation order (e.g. running total, LAG).
+-- Odpověď:
+-- Určuje pořadí výpočtu (např. running total, LAG).
 
 
 -- ============================================================
 -- 3. RUNNING TOTAL
 -- ============================================================
 
--- What does this do?
+-- Co dělá:
 
 -- SUM(revenue) OVER (
 --     PARTITION BY customer
 --     ORDER BY date
 -- )
 
--- Answer:
--- Running total per customer over time.
+-- Odpověď:
+-- Kumulativní součet pro každého zákazníka v čase.
 
 
 -- ============================================================
--- 4. SHARE OF TOTAL
+-- 4. PODÍL NA CELKU
 -- ============================================================
 
--- What does this calculate?
+-- Co počítá:
 
 -- revenue * 100.0 / SUM(revenue) OVER ()
 
--- Answer:
--- Share (%) of each row relative to total.
+-- Odpověď:
+-- Procentuální podíl na celkovém součtu.
 
 
 -- ============================================================
--- 5. SHARE WITHIN GROUP
+-- 5. PODÍL VE SKUPINĚ
 -- ============================================================
 
--- What does this do?
+-- Co počítá:
 
 -- revenue * 100.0 / SUM(revenue) OVER (PARTITION BY customer)
 
--- Answer:
--- Share (%) within each customer.
+-- Odpověď:
+-- Procentuální podíl v rámci zákazníka.
 
 
 -- ============================================================
--- 6. MAX DIFFERENCE
+-- 6. ROZDÍL OD MAXIMA
 -- ============================================================
 
--- What does this return?
+-- Co vrátí:
 
 -- MAX(revenue) OVER (PARTITION BY customer) - revenue
 
--- Answer:
--- Difference from max value within customer.
+-- Odpověď:
+-- Rozdíl od maximální hodnoty v rámci zákazníka.
 
 
 -- ============================================================
 -- 7. LAG
 -- ============================================================
 
--- What does LAG do?
+-- Co dělá LAG?
 
--- Answer:
--- Returns previous row value.
+-- Odpověď:
+-- Vrací předchozí hodnotu.
 
 
 -- ============================================================
 -- 8. LEAD
 -- ============================================================
 
--- What does LEAD do?
+-- Co dělá LEAD?
 
--- Answer:
--- Returns next row value.
+-- Odpověď:
+-- Vrací následující hodnotu.
 
 
 -- ============================================================
 -- 9. RANK vs ROW_NUMBER
 -- ============================================================
 
--- Difference?
+-- Jaký je rozdíl?
 
--- Answer:
--- RANK keeps ties.
--- ROW_NUMBER breaks ties.
+-- Odpověď:
+-- RANK zachovává remízy.
+-- ROW_NUMBER remízy rozbíjí.
 
 
 -- ============================================================
--- 10. TRICKY
+-- 10. CHYTÁK
 -- ============================================================
 
--- Why does this NOT preserve ties?
+-- Proč toto nezachová remízy?
 
 -- RANK() OVER (
 --     ORDER BY revenue DESC, customer
 -- )
 
--- Answer:
--- Because ORDER BY includes customer → values are no longer equal.
+-- Odpověď:
+-- Protože ORDER BY obsahuje další sloupec → hodnoty už nejsou stejné.
 
 
 -- ============================================================
 -- BONUS
 -- ============================================================
 
--- What happens if ORDER BY is missing in LAG?
+-- Co se stane, když LAG nemá ORDER BY?
 
--- Answer:
--- Result is undefined (no defined order).
+-- Odpověď:
+-- Výsledek není definovaný (není určené pořadí).
+
 
 -- ============================================================
 -- END
 -- ============================================================
-
-
