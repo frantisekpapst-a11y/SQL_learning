@@ -18,6 +18,7 @@ Tento repozitář dokumentuje moji cestu učení SQL – od úplných základů 
 - `case_study_5.sql` → revenue change + growth/decline status  
 - `case_study_6.sql` → filtering + TOP growth customers  
 - `case_study_7.sql` → customer value analysis (revenue, segment, ranking)
+- `case_study_8.sql` → customer activity gaps (LAG, DATEDIFF, inactivity analysis)
 
 ---
 
@@ -209,6 +210,25 @@ Komplexní analýza zákaznické hodnoty.
 - CASE WHEN  
 - RANK()  
 - subquery vs CTE  
+
+---
+
+## 📊 Case Study 8 – Customer Activity Gaps
+
+Analýza neaktivity zákazníků v čase.
+
+### Co řeším
+- předchozí datum aktivity
+- počet dní od minulé aktivity
+- klasifikaci `new / active / inactive_gap`
+- největší inactive gap overall
+
+### Hlavní témata
+- `LAG()`
+- `DATEDIFF()`
+- `CASE WHEN`
+- `CTE`
+- `RANK()`
 
 ---
 
