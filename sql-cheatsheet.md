@@ -1,4 +1,4 @@
-📘 SQL Basics – Data Analyst Cheat Sheet (v9)
+📘 SQL Basics – Data Analyst Cheat Sheet (v10)
 
 🧠 1. Struktura SQL dotazu
 SELECT co_chci_videt
@@ -19,7 +19,7 @@ FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
 ✍️ 3. Syntaxe
 , → odděluje sloupce
 ; → konec dotazu
-mezery → čitelnost
+poslední sloupec → bez čárky
 
 📊 4. SELECT
 SELECT * FROM orders;
@@ -27,9 +27,11 @@ SELECT * FROM orders;
 🎯 5. WHERE
 WHERE amount > 400
 
+👉 filtr před agregací
+
 🔢 6. Agregace
-COUNT(*)      -- všechny řádky
-COUNT(col)    -- bez NULL
+COUNT(*)        -- všechny řádky
+COUNT(col)      -- bez NULL
 SUM(amount)
 AVG(amount)
 MAX(amount)
@@ -43,6 +45,8 @@ GROUP BY customer_id;
 🔎 8. HAVING
 HAVING SUM(amount) > 1000
 
+👉 filtr po agregaci
+
 🧠 9. WHERE vs HAVING
 WHERE	HAVING
 řádky	skupiny
@@ -50,18 +54,24 @@ před GROUP BY	po GROUP BY
 
 🔗 10. JOIN
 JOIN customers c ON o.customer_id = c.customer_id
+
+👉 jen shody
+
 ⬅️ LEFT JOIN
 LEFT JOIN orders o ON c.customer_id = o.customer_id
 
+👉 vše zleva + NULL
+
 🧠 11. LEFT JOIN – WHERE vs ON
 
-❌
+❌ špatně:
 
 WHERE o.amount > 400
 
-✅
+✅ správně:
 
-ON c.customer_id = o.customer_id AND o.amount > 400
+ON c.customer_id = o.customer_id
+AND o.amount > 400
 
 🧠 12. COUNT u LEFT JOIN
 výraz	význam
@@ -72,6 +82,7 @@ COUNT(col)	jen nenull
 část	funguje
 SELECT	✅
 WHERE	❌
+HAVING	⚠️ (většinou ano v MySQL)
 ORDER BY	✅
 
 🧠 14. Subquery
@@ -87,17 +98,22 @@ SUM(quantity * price)
 🧠 16. COALESCE
 COALESCE(SUM(amount), 0)
 
+👉 NULL → 0
+
 🔥 17. CASE WHEN
 CASE
     WHEN condition THEN 'value'
     ELSE 'value'
 END
 
+👉 může používat více sloupců
+👉 vrací jeden sloupec
+
 🧠 18. GROUP BY pravidlo
 
-👉 každý sloupec:
+👉 každý sloupec v SELECT:
 
-v GROUP BY
+buď v GROUP BY
 nebo agregace
 
 🧠 19. JOIN logika
@@ -109,86 +125,99 @@ ROW_NUMBER() OVER (
     ORDER BY revenue DESC
 )
 
+👉 WHERE rn = 1
+
 🧠 21. ROW_NUMBER vs RANK
 funkce	chování
-ROW_NUMBER	bez remíz
-RANK	remízy
+ROW_NUMBER	rozbije remízy
+RANK	zachová remízy
 
 🚀 22. WINDOW FUNCTIONS
-🎯 Total vedle řádku
+
+👉 agregace bez GROUP BY (zachová řádky)
+
+Total
 SUM(revenue) OVER (PARTITION BY customer)
-🎯 Podíl (%)
+Podíl (%)
 revenue * 100.0 / SUM(revenue) OVER (PARTITION BY customer)
-🎯 Podíl na celku
+Podíl na celku
 revenue / SUM(revenue) OVER ()
-🎯 Running total
+Running total
 SUM(revenue) OVER (
     PARTITION BY customer
     ORDER BY date
 )
-🎯 MAX ve skupině
+MAX ve skupině
 MAX(revenue) OVER (PARTITION BY customer)
-🎯 Rozdíl od maxima
-MAX(revenue) OVER (PARTITION BY customer) - revenue
-🧠 PARTITION BY
 
-👉 určuje kontext výpočtu
-
-🔥 23. LAG / LEAD (NOVÉ)
-🎯 Předchozí hodnota
+🔥 23. LAG / LEAD
 LAG(revenue) OVER (
     PARTITION BY customer
     ORDER BY date
 )
-🎯 Následující hodnota
-LEAD(revenue) OVER (
-    PARTITION BY customer
-    ORDER BY date
-)
-🎯 Změna
-revenue - LAG(revenue) OVER (...)
-🎯 % změna
-(revenue - LAG(revenue) OVER (...))
-/
-LAG(revenue) OVER (...)
-⚠️ První řádek
 
-👉 NULL (není předchozí hodnota)
+👉 předchozí hodnota
+
+LEAD(revenue) OVER (...)
+
+👉 následující hodnota
+
+změna
+revenue - LAG(revenue) OVER (...)
+% změna
+(revenue - LAG(revenue) OVER (...)) / LAG(revenue) OVER (...)
+
+⚠️ první řádek → NULL
 
 🔥 24. CTE (WITH)
-🎯 Syntaxe
 WITH name AS (
     SELECT ...
 )
 SELECT * FROM name;
-🧠 Co to je
 
 👉 pojmenovaný mezivýsledek
 
-🎯 Více kroků
+vícekrokový dotaz
 WITH base AS (...),
 metrics AS (...)
 SELECT * FROM metrics;
-🧠 Kdy použít
 
-👉 složitější dotaz
-👉 více kroků
-👉 lepší čitelnost
+👉 čitelnější než subquery
 
-🔥 25. Kombinace (velmi důležité)
+🔥 25. Alias + WHERE problém
+
+❌ nefunguje:
+
+SELECT ..., CASE ... AS status
+FROM t
+WHERE status = 'active'
+
+✅ řešení:
+
+subquery
+nebo CTE
+
+🔥 26. Kombinace (velmi důležité)
 LAG + výpočty
-revenue - prev_revenue
-Ranking
-ROW_NUMBER() OVER (ORDER BY revenue_change DESC)
-TOP N
-WHERE rn <= 3
-TOP s remízami
-RANK()
+CASE (status)
+RANK / ROW_NUMBER
+TOP N (WHERE rn <= 3)
 
-⚡ 26. Mentální model
+🔥 27. Activity / gap analysis
+DATEDIFF(date, prev_date)
+
+👉 počet dní mezi aktivitami
+
+CASE
+ WHEN prev_date IS NULL THEN 'new'
+ WHEN days_since_prev > X THEN 'inactive'
+ ELSE 'active'
+END
+
+⚡ 28. Mentální model
 data → výpočet → filtr → výstup
 
-🚀 27. Rychlé rozhodování
+🚀 29. Rychlé rozhodování
 otázka	řešení
 kolik	COUNT
 celkem	SUM
@@ -197,7 +226,12 @@ změna	LAG
 top	ROW_NUMBER / RANK
 podíl	SUM() OVER
 
-🧠 28. SQL mindset
+🧠 30. SQL mindset
 
 👉 SQL = popis výsledku
 👉 ne postup
+
+👉 přemýšlej:
+
+co chci vidět
+ne jak to počítat krok po kroku
