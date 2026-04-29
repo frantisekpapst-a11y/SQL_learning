@@ -2,7 +2,7 @@
 
 Tento repozitář dokumentuje moji cestu učení SQL – od úplných základů až po pokročilejší analytické case studies.
 
-🎯 Cíl: dostat se na úroveň junior data analytika a umět řešit reálné business problémy pomocí dat.
+🎯 **Cíl:** dostat se na úroveň junior data analytika a umět řešit reálné business problémy pomocí dat.
 
 ---
 
@@ -17,8 +17,8 @@ Tento repozitář dokumentuje moji cestu učení SQL – od úplných základů 
 - `case_study_4.sql` → customer revenue trends (LAG, % change)  
 - `case_study_5.sql` → revenue change + growth/decline status  
 - `case_study_6.sql` → filtering + TOP growth customers  
-- `case_study_7.sql` → customer value analysis (revenue, segment, ranking)
-- `case_study_8.sql` → customer activity gaps (LAG, DATEDIFF, inactivity analysis)
+- `case_study_7.sql` → customer value analysis (revenue, segment, ranking)  
+- `case_study_8.sql` → customer activity gaps (LAG, DATEDIFF, inactivity analysis)  
 - `case_study_9.sql` → latest customer revenue status (LAG, ROW_NUMBER, CASE, CTE pipeline)
 
 ---
@@ -59,19 +59,19 @@ Tento repozitář dokumentuje moji cestu učení SQL – od úplných základů 
 
 # 📊 Používané datasety
 
-Používám jednoduché testovací datasety pro pochopení principů:
+Používám jednoduché testovací datasety pro pochopení principů datové analýzy.
 
 ### Jednoduchý dataset
-- `orders`
-- `customers`
+- `orders`  
+- `customers`  
 
 ### Rozšířený dataset
-- customers  
-- orders  
-- order_items  
-- products  
+- `customers`  
+- `orders`  
+- `order_items`  
+- `products`  
 
-👉 Tento model umožňuje řešit realističtější úlohy:
+👉 Tento model umožňuje řešit realističtější analytické úlohy:
 - revenue podle zákazníka  
 - revenue podle produktu  
 - revenue podle kategorie  
@@ -82,7 +82,7 @@ Používám jednoduché testovací datasety pro pochopení principů:
 
 # 🧪 Practice / mini úkoly
 
-Repozitář obsahuje i menší cvičení pro budování SQL myšlení.
+Repozitář obsahuje menší cvičení zaměřená na budování SQL myšlení.
 
 ## 🟢 Základy
 - vypsání dat  
@@ -104,7 +104,7 @@ Repozitář obsahuje i menší cvičení pro budování SQL myšlení.
 - TOP per group  
 - ROW_NUMBER vs RANK  
 - segmentace  
-- práce s mezivýsledky  
+- práce s mezivýsledky (CTE)  
 
 ---
 
@@ -114,9 +114,9 @@ Repozitář obsahuje i menší cvičení pro budování SQL myšlení.
 Základní analýza zákazníků.
 
 **Co řeším:**
-- celkovou útratu
-- počet objednávek
-- průměr
+- celkovou útratu  
+- počet objednávek  
+- průměr  
 
 **Témata:**
 - GROUP BY  
@@ -159,7 +159,7 @@ Kombinace více analytických kroků.
 Analýza vývoje v čase.
 
 **Co řeším:**
-- revenue per period  
+- revenue v čase  
 - předchozí hodnota  
 - změna a % změna  
 
@@ -218,18 +218,17 @@ Komplexní analýza zákaznické hodnoty.
 
 Analýza neaktivity zákazníků v čase.
 
-### Co řeším
-- předchozí datum aktivity
-- počet dní od minulé aktivity
-- klasifikaci `new / active / inactive_gap`
-- největší inactive gap overall
+**Co řeším:**
+- předchozí datum aktivity  
+- počet dní od minulé aktivity  
+- klasifikaci `new / active / inactive_gap`  
+- identifikaci neaktivních zákazníků  
 
-### Hlavní témata
-- `LAG()`
-- `DATEDIFF()`
-- `CASE WHEN`
-- `CTE`
-- `RANK()`
+**Témata:**
+- `LAG()`  
+- `DATEDIFF()`  
+- `CASE WHEN`  
+- `CTE`  
 
 ---
 
@@ -237,47 +236,48 @@ Analýza neaktivity zákazníků v čase.
 
 Finální SQL mini projekt zaměřený na poslední známý stav zákazníka.
 
-### Co řeším
-- poslední známý záznam zákazníka
-- revenue v aktuálním období
-- revenue v předchozím období
-- změnu revenue
-- status zákazníka (`growth / decline / no_change / new`)
+**Co řeším:**
+- poslední známý záznam zákazníka  
+- revenue v aktuálním období  
+- revenue v předchozím období  
+- změnu revenue  
+- status zákazníka (`growth / decline / no_change / new`)  
 
-### Hlavní témata
-- `LAG()`
-- `ROW_NUMBER()`
-- `CASE WHEN`
-- `CTE`
-- latest row per customer
-
---- 
-
-# 🧠 Jak nad SQL přemýšlím
-
-SQL není jen syntaxe, ale způsob uvažování:
-
-1. Odkud beru data (FROM)  
-2. Jaké tabulky spojím (JOIN)  
-3. Co odfiltruju (WHERE)  
-4. Jak seskupím data (GROUP BY)  
-5. Co spočítám (SUM, COUNT…)  
-6. Co filtruju po agregaci (HAVING)  
-7. Jak seřadím výstup (ORDER BY)  
-
-👉 Postupně přecházím od jednoduchých dotazů k řešení reálných analytických problémů.
+**Témata:**
+- `LAG()`  
+- `ROW_NUMBER()`  
+- `CASE WHEN`  
+- `CTE`  
+- výběr posledního řádku per customer  
 
 ---
 
-# 🚀 Co dál
+# 🧠 Jak nad SQL přemýšlím
 
-Další kroky:
+SQL pro mě není jen syntaxe, ale způsob uvažování nad daty:
 
-- pokročilejší window functions  
-- komplexnější case studies  
-- SQL + Excel  
-- Power BI (dashboardy)  
+1. Odkud beru data (FROM)  
+2. Jaké tabulky potřebuji (JOIN)  
+3. Co odfiltruji (WHERE)  
+4. Jak data seskupím (GROUP BY)  
+5. Co spočítám (SUM, COUNT…)  
+6. Co filtruji po agregaci (HAVING)  
+7. Jak seřadím výstup (ORDER BY)  
+
+👉 Postupně přecházím od psaní dotazů k řešení reálných analytických problémů.
+
+---
+
+# 🚀 Další směr
+
+Další krok v learning journey:
+
+- Excel (základy + pokročilé funkce)  
+- Power BI (dashboardy, DAX)  
+- pokročilejší datová analýza  
 - Python (pandas, EDA)  
+
+👉 SQL zůstává základním nástrojem, na který budu navazovat.
 
 ---
 
