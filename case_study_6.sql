@@ -5,7 +5,7 @@
 
 -- Goal:
 -- Identify customers with the highest revenue growth between periods.
---
+
 -- For each customer:
 -- 1. Calculate previous revenue (LAG)
 -- 2. Compute revenue change
