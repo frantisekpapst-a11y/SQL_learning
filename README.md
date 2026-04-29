@@ -19,6 +19,7 @@ Tento repozitář dokumentuje moji cestu učení SQL – od úplných základů 
 - `case_study_6.sql` → filtering + TOP growth customers  
 - `case_study_7.sql` → customer value analysis (revenue, segment, ranking)
 - `case_study_8.sql` → customer activity gaps (LAG, DATEDIFF, inactivity analysis)
+- `case_study_9.sql` → latest customer revenue status (LAG, ROW_NUMBER, CASE, CTE pipeline)
 
 ---
 
@@ -231,6 +232,26 @@ Analýza neaktivity zákazníků v čase.
 - `RANK()`
 
 ---
+
+## 📊 Case Study 9 – Latest Customer Revenue Status
+
+Finální SQL mini projekt zaměřený na poslední známý stav zákazníka.
+
+### Co řeším
+- poslední známý záznam zákazníka
+- revenue v aktuálním období
+- revenue v předchozím období
+- změnu revenue
+- status zákazníka (`growth / decline / no_change / new`)
+
+### Hlavní témata
+- `LAG()`
+- `ROW_NUMBER()`
+- `CASE WHEN`
+- `CTE`
+- latest row per customer
+
+--- 
 
 # 🧠 Jak nad SQL přemýšlím
 
