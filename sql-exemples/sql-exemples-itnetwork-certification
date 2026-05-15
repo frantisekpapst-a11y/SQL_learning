@@ -1,0 +1,203 @@
+📘 SQL Examples — Lekce 1–6 (ITnetwork Inspired)
+
+📗 Lekce 1 — CREATE DATABASE / CREATE TABLE
+
+Query #1 — Vytvoření databáze
+
+CREATE DATABASE FitnessCentrum;
+
+Výsledek
+Vytvoří novou databázi FitnessCentrum.
+
+Query #2 — Vytvoření tabulky
+
+CREATE TABLE Clenove (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Jmeno NVARCHAR(50),
+    Vek INT,
+    Tarif NVARCHAR(30)
+);
+
+Sloupec	Typ
+Id	INT
+Jmeno	NVARCHAR
+Vek	INT
+Tarif	NVARCHAR
+
+📗 Lekce 2 — INSERT INTO
+
+Query #1 — Vložení jednoho řádku
+
+INSERT INTO Clenove (
+    Jmeno,
+    Vek,
+    Tarif
+)
+VALUES (
+    'Jan',
+    28,
+    'Premium'
+);
+
+Jmeno	Vek	Tarif
+Jan	28	Premium
+
+Query #2 — Vložení více řádků
+
+INSERT INTO Clenove (
+    Jmeno,
+    Vek,
+    Tarif
+)
+VALUES
+('Eva', 34, 'Basic'),
+('Petr', 19, 'Student'),
+('Lucie', 41, 'Premium');
+
+Počet vložených řádků
+3
+
+📗 Lekce 3 — UPDATE
+
+Query #1 — Úprava tarifu
+
+UPDATE Clenove
+SET Tarif = 'Standard'
+WHERE Tarif = 'Basic';
+
+Původní tarif	Nový tarif
+Basic	Standard
+
+Query #2 — Zvýšení věku
+
+UPDATE Clenove
+SET Vek = Vek + 1
+WHERE Jmeno = 'Petr';
+
+Jmeno	Změna
+Petr	věk +1
+
+📗 Lekce 4 — DELETE / TRUNCATE / DROP
+
+Query #1 — Smazání neaktivních členů
+
+DELETE FROM Clenove
+WHERE Aktivni = 0;
+
+Akce
+Smazání vybraných řádků
+
+Query #2 — Vyprázdnění tabulky
+
+TRUNCATE TABLE Clenove;
+
+Akce
+Smazání všech řádků
+
+Query #3 — Odstranění tabulky
+
+DROP TABLE Clenove;
+Akce
+Kompletní odstranění tabulky
+
+📗 Lekce 5 — Import / Export / CRUD
+
+Query #1 — CRUD operace
+
+CREATE TABLE Produkty (
+    Id INT PRIMARY KEY,
+    Nazev NVARCHAR(50)
+);
+INSERT INTO Produkty VALUES (1, 'Notebook');
+UPDATE Produkty
+SET Nazev = 'Herní notebook'
+WHERE Id = 1;
+DELETE FROM Produkty
+WHERE Id = 1;
+
+CRUD	Význam
+Create	vytvoření
+Read	čtení
+Update	úprava
+Delete	mazání
+
+📗 Lekce 6 — SELECT / WHERE / LIKE / IN / BETWEEN
+
+Query #1 — Výběr všech produktů
+
+SELECT *
+FROM produkty;
+
+Výsledek
+Všechny řádky a sloupce
+
+Query #2 — Výběr konkrétních sloupců
+
+SELECT nazev, cena
+FROM produkty;
+
+Sloupce
+nazev, cena
+
+Query #3 — Filtrování pomocí WHERE
+
+SELECT *
+FROM produkty
+WHERE cena > 5000;
+
+Podmínka
+cena větší než 5000
+
+Query #4 — AND
+SELECT *
+FROM produkty
+WHERE cena > 1000
+AND skladem > 5;
+
+Podmínky
+obě musí platit
+
+Query #5 — OR
+
+SELECT *
+FROM produkty
+WHERE kategorie = 'Nábytek'
+OR cena > 20000;
+
+Vrátí
+nábytek nebo drahé produkty
+
+Query #6 — LIKE
+
+SELECT *
+FROM produkty
+WHERE nazev LIKE '%Samsung%';
+
+Vrátí
+názvy obsahující Samsung
+
+Query #7 — IN
+
+SELECT *
+FROM produkty
+WHERE kategorie IN ('Elektronika', 'Doplňky');
+
+Vrátí
+produkty z vybraných kategorií
+
+Query #8 — BETWEEN
+
+SELECT *
+FROM produkty
+WHERE cena BETWEEN 1000 AND 10000;
+
+Rozsah
+1000–10000
+
+Query #9 — TOP
+
+SELECT TOP 3 *
+FROM produkty;
+
+Vrátí
+první 3 řádky
