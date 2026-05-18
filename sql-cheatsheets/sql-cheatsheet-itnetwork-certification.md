@@ -1,6 +1,6 @@
-🗄️ SQL Cheatsheet — ITnetwork Lekce 1–11
+🗄️ SQL Cheatsheet — ITnetwork Lekce 1–21
 
-MS-SQL základy • CRUD • JOIN • GROUP BY • M:N • CTE • Poddotazy
+MS-SQL základy • CRUD • JOIN • GROUP BY • HAVING • Transakce • View • Procedury • Triggery • Fulltext • Indexy
 
 🎯 Praktický cheatsheet k lekcím 1–11 MS-SQL
 Zaměřeno na datovou analytiku a SQL mindset.
@@ -448,7 +448,6 @@ top hodnota	MAX
 průměr	AVG
 
 🧠 49. Největší posuny v SQL mindsetu
-
 ✅ SQL = práce s datasety
 ✅ JOIN = spojování datasetů
 ✅ WHERE = filtrování výsledku
@@ -456,3 +455,338 @@ průměr	AVG
 ✅ GROUP BY = agregace
 ✅ CTE = rozdělení problému na kroky
 ✅ SQL není programování krok po kroku
+
+🧠 50. ALTER TABLE
+Přidání sloupce
+ALTER TABLE [Komentare]
+ADD [Palce] INT;
+Změna datového typu
+ALTER TABLE [Komentare]
+ALTER COLUMN [Palce] BIGINT;
+Odebrání sloupce
+ALTER TABLE [Komentare]
+DROP COLUMN [Palce];
+
+🔢 51. DBCC CHECKIDENT
+
+Změna počáteční hodnoty IDENTITY:
+
+DBCC CHECKIDENT ('Uzivatele', reseed, 1233);
+
+👉 další vložené ID bude 1234
+
+🔄 52. Transakce
+BEGIN TRANSACTION;
+
+UPDATE accounts
+SET balance = balance - 100
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 100
+WHERE id = 2;
+
+COMMIT TRANSACTION;
+
+👉 buď proběhne vše
+👉 nebo nic
+
+❌ 53. ROLLBACK
+ROLLBACK TRANSACTION;
+
+👉 vrátí databázi do původního stavu
+
+⚡ 54. COMMIT
+COMMIT TRANSACTION;
+
+👉 potvrdí změny
+
+🧠 55. ACID
+Vlastnost	Význam
+Atomicity	vše nebo nic
+Consistency	konzistence dat
+Isolation	oddělení transakcí
+Durability	trvalost dat
+
+👁️ 56. VIEW
+CREATE VIEW AktivniUzivatele AS
+SELECT *
+FROM users
+WHERE active = 1;
+
+👉 virtuální tabulka
+👉 uložený SELECT
+👉 data se generují až při spuštění
+
+🧩 57. Výhody VIEW
+
+✅ zjednodušení složitých dotazů
+✅ zapouzdření JOINů
+✅ lepší čitelnost
+✅ řízení oprávnění
+
+⚡ 58. Databázový index
+
+👉 speciální struktura pro rychlé vyhledávání
+
+CREATE INDEX I1
+ON [Clanky] ([Url]);
+
+🚀 59. Kdy použít index
+
+✅ často používané WHERE
+✅ JOIN sloupce
+✅ časté filtrování
+
+❌ neindexovat vše bez důvodu
+
+⚠️ 60. Nevýhoda indexů
+
+👉 zpomalují:
+
+INSERT
+UPDATE
+DELETE
+
+protože databáze musí indexy aktualizovat
+
+🔗 61. Vícesloupcový index
+CREATE INDEX idx_user
+ON users(first_name, last_name);
+
+👉 optimalizace hledání přes více sloupců
+
+🧱 62. Normalizace
+
+👉 rozdělení dat do správných tabulek
+
+Cíl:
+
+čistá data
+méně duplicit
+lepší rozšiřitelnost
+
+💥 63. Denormalizace
+
+👉 úmyslné porušení normalizace kvůli výkonu
+
+Používat:
+
+opatrně
+až když je to opravdu potřeba
+
+🔍 64. HAVING
+SELECT
+    customer_id,
+    SUM(amount)
+FROM orders
+GROUP BY customer_id
+HAVING SUM(amount) > 1000;
+
+👉 filtruje agregované skupiny
+
+⚡ 65. WHERE vs HAVING
+WHERE	HAVING
+filtruje řádky	filtruje skupiny
+před GROUP BY	po GROUP BY
+neumí agregace	umí agregace
+
+🧠 66. Logické pořadí SELECT
+FROM
+JOIN
+ON
+WHERE
+GROUP BY
+HAVING
+SELECT
+ORDER BY
+
+👉 alias ze SELECT ještě v HAVING neexistuje
+
+⚙️ 67. Trigger
+
+👉 automaticky spuštěný kód při změně dat
+
+Typy:
+
+INSERT
+UPDATE
+DELETE
+
+🔥 68. AFTER Trigger
+AFTER INSERT
+AFTER UPDATE
+AFTER DELETE
+
+👉 spustí se po operaci
+
+🔄 69. INSTEAD OF Trigger
+
+👉 nahradí původní operaci
+
+INSTEAD OF INSERT
+
+📥 70. inserted a deleted
+Pseudotabulka	Obsah
+inserted	nové hodnoty
+deleted	staré hodnoty
+
+🧠 71. DECLARE
+DECLARE @pocet INT;
+
+👉 deklarace lokální proměnné
+
+⚙️ 72. IF ELSE
+IF @pocet > 10
+    SELECT 'OK';
+ELSE
+    SELECT 'Malo';
+
+👉 větvení logiky
+
+📦 73. Stored Procedure
+CREATE PROCEDURE GetUsers
+AS
+BEGIN
+    SELECT * FROM users;
+END;
+
+👉 uložený program na serveru
+
+▶️ 74. EXEC
+EXEC GetUsers;
+
+👉 spuštění procedury
+
+✏️ 75. ALTER PROCEDURE
+ALTER PROCEDURE GetUsers
+AS
+BEGIN
+    SELECT id, name FROM users;
+END;
+
+👉 změna procedury
+
+❌ 76. DROP PROCEDURE
+DROP PROCEDURE GetUsers;
+
+📥 77. Parametry procedury
+CREATE PROCEDURE AddUser
+    @Name NVARCHAR(50)
+AS
+BEGIN
+    ...
+END;
+
+📤 78. OUTPUT parametr
+@Count INT OUT
+
+👉 vrací hodnotu zpět
+
+🧠 79. TRY CATCH
+BEGIN TRY
+    SELECT 1/0;
+END TRY
+BEGIN CATCH
+    SELECT ERROR_MESSAGE();
+END CATCH;
+
+👉 zachytávání chyb
+
+👤 80. LOGIN vs USER
+LOGIN	USER
+přístup k serveru	přístup k databázi
+
+🔐 81. GRANT
+GRANT SELECT, EXECUTE
+ON DATABASE::Firma
+TO test;
+
+👉 přidělení oprávnění
+
+🔄 82. EXECUTE AS USER
+EXECUTE AS USER='test';
+
+👉 přepnutí uživatele
+
+↩️ 83. REVERT
+REVERT;
+
+👉 návrat k původnímu uživateli
+
+🔍 84. LIKE
+WHERE email LIKE '%@gmail.com'
+Symbol	Význam
+%	libovolný počet znaků
+_	jeden znak
+
+🚀 85. Fulltextové vyhledávání (FTS)
+
+👉 rychlé vyhledávání v textu
+👉 relevance výsledků
+👉 práce s významem slov
+
+🧱 86. Fulltextový katalog
+CREATE FULLTEXT CATALOG ClankyCatalog;
+
+👉 kontejner pro fulltextové indexy
+
+🔎 87. Fulltextový index
+CREATE FULLTEXT INDEX ON [Clanky]
+(
+    [Obsah] LANGUAGE 1029
+)
+KEY INDEX [FulltextId]
+ON [ClankyCatalog];
+
+👉 speciální index pro textové hledání
+
+🧠 88. CONTAINS
+WHERE CONTAINS([Obsah], 'hra')
+
+👉 přesná fulltext shoda
+
+🧠 89. FREETEXT
+WHERE FREETEXT([Obsah], 'hra')
+
+👉 významové hledání
+👉 pracuje se skloňováním
+
+📊 90. CONTAINSTABLE / FREETEXTTABLE
+
+Vrací:
+
+KEY
+RANK
+SELECT *
+FROM CONTAINSTABLE(...)
+
+🏆 91. RANK
+
+👉 relevance výsledku
+
+Čím vyšší:
+
+tím relevantnější výsledek
+
+🌍 92. LANGUAGE 1029
+LANGUAGE 1029
+
+👉 český jazyk
+
+Umožňuje:
+
+skloňování
+časování
+práci s kořeny slov
+
+🧠 93. SQL mindset — pokročilejší úroveň
+
+✅ databáze = optimalizace práce s datasety
+✅ indexy = výkon
+✅ transakce = konzistence
+✅ procedury = zapouzdření logiky
+✅ triggery = automatické reakce
+✅ fulltext = inteligentní vyhledávání
+✅ SQL není jen SELECT 🙂
+
