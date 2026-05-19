@@ -15,7 +15,7 @@ Dostat se na úroveň junior data analytika a naučit se řešit reálné busine
  ┣ 📂 sql-examples-itnetwork-certification
  ┣ 📂 sql-fiddle-examples
  ┣ 📂 sql-case-studies-itnetwork-certification
- ┣ 📂 sql-original-case-studies
+ ┣ 📂 sql-case-studies-original
  ┣ 📂 sql-mini-tests
  ┣ 📂 sql-cheatsheets
  ┗ 📂 sql-notes
