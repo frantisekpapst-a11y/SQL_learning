@@ -460,10 +460,10 @@ Zaměřeno na:
 
 # 🎯 Learning roadmap
 
+🔄 Opakování + závěrečný test (88 %)
+
 Další plánovaný směr:
 
-- závěrečné opakování SQL
-- finální certifikační test
 - Úvod do datové analytiky
 - Power Query
 - Power BI
