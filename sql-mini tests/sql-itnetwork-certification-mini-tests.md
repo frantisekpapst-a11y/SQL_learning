@@ -1,4 +1,5 @@
-🧠 SQL mini testy z kurzu itnetwork Datová analýza od A do Z
+🧠 SQL mini testy z kurzu itnetwork Datová analýza od A do Z.
+
 Posledních 15 otázek je ze závěrečného testu části SQL.
 
 📘Blok 1 — Základy SQL
@@ -309,3 +310,96 @@ DROP CONSTRAINT [UzivateleKomentare];
 64. ON DELETE SET DEFAULT:
 
 ✅ Hodnota cizího klíče bude nastavena na výchozí hodnotu.
+
+📘 Blok 9 — Závěrečný test (Final Quiz)
+
+65. Export databáze se NEdělí na:
+
+✅ Transakční export
+
+66. O SQL injection platí:
+
+✅ SQL injection může napadnout kód:
+"DELETE FROM [Uzivatele] WHERE [Prijmeni] = '" + prijmeni + "'";
+
+67. V MS-SQL existují dotazy:
+
+✅ Korelované a nekorelované.
+
+68. Pokud chceme T-SQL příkazy vykonat jako uživatel honza:
+
+✅ EXECUTE AS USER='honza';
+
+69. SQL dotaz:
+
+SELECT * FROM [Uzivatele]
+WHERE [DatumNarozeni] >= '1960-1-1'
+    OR [PocetClanku] > 5
+    OR [PocetClanku] < 1;
+
+nikdy NEvybere:
+
+✅ uživatele se 4 články a datem narození 2. 6. 1954.
+
+70. O RDBMS neplatí:
+
+✅ Řeší syntaktické chyby v jazyce Java a C#.
+
+71. Nad rámec operátorů z programovacích jazyků SQL obsahuje:
+
+✅ LIKE
+
+72. Operátor pro test přítomnosti hodnoty ve výčtu:
+
+✅ IN
+
+73. Mezi CRUD operace patří:
+
+✅ Read
+
+74. SQL kód:
+
+INSERT INTO [Hrdinove] (
+    [Jmeno],
+    [Prijmeni],
+    [SpecialniSchopnost]
+)
+VALUES ('Jan', 'Dlouhý', 'Výška'),
+       ('Tomáš', 'Široký', 'Objem'),
+       ('Josef', 'Bystrozraký', 'Dalekohled');
+
+Nesprávné tvrzení:
+
+✅ Změní sloupec Prijmeni každého záznamu v tabulce na Tomáš.
+
+75. Triggery nereagují na:
+
+✅ SELECT
+
+76. Primární klíč slouží:
+
+✅ K jedinečné identifikaci záznamu v tabulce.
+
+77. SQL dotaz:
+
+DELETE
+FROM [Uzivatele]
+WHERE ([Jmeno] = 'Jan' AND [DatumNarozeni] >= '1980-1-1')
+    OR ([PocetClanku] < 3)
+    OR ([Jmeno] = 'Brunhilda');
+
+udělá:
+
+✅ Odstraní uživatele, kteří mají jméno Jan a zároveň jsou narozeni po roce 1980.
+
+78. ACID se stará:
+
+✅ O konzistenci dat v databázi.
+
+79. Pro cizí klíč platí:
+
+✅ Je primární klíč jiné tabulky.
+
+80. Celou databázi můžeme importovat pomocí:
+
+✅ DACPAC
